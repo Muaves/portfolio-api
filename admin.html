@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Muaves Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 0;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #00ff88;
+            color: #0a0a0a;
+            padding: 10px 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.5);
+        }
+        
+        h1 {
+            font-size: 3em;
+            background: linear-gradient(45deg, #ff0044, #ff8800);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid #ff0044;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .stat-card h3 {
+            color: #ff0044;
+            margin-bottom: 15px;
+        }
+        
+        .stat-number {
+            font-size: 3em;
+            color: #ff8800;
+            font-weight: bold;
+        }
+        
+        .section {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid #ff0044;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            color: #ff0044;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            color: #ff8800;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ff0044;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            font-size: 1em;
+            outline: none;
+        }
+        
+        input[type="text"]:focus,
+        textarea:focus {
+            box-shadow: 0 0 15px rgba(255, 0, 68, 0.3);
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, #ff0044, #ff8800);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(255, 0, 68, 0.5);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #ff0044;
+            margin-left: 10px;
+        }
+        
+        .project-list {
+            margin-top: 20px;
+        }
+        
+        .project-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid #ff0044;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .project-info h4 {
+            color: #ff0044;
+            margin-bottom: 5px;
+        }
+        
+        .project-info p {
+            color: #888;
+            font-size: 0.9em;
+        }
+        
+        .project-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 0.9em;
+        }
+        
+        .btn-delete {
+            background: #ff0044;
+        }
+        
+        .btn-edit {
+            background: #ff8800;
+        }
+        
+        .success-message {
+            background: rgba(0, 255, 136, 0.2);
+            border: 2px solid #00ff88;
+            color: #00ff88;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .success-message.show {
+            display: block;
+            animation: slideIn 0.3s;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .top-projects {
+            margin-top: 20px;
+        }
+        
+        .top-project-item {
+            background: rgba(0, 255, 136, 0.1);
+            border: 2px solid #00ff88;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .top-project-item h4 {
+            color: #00ff88;
+        }
+        
+        .views-badge {
+            background: #00ff88;
+            color: #0a0a0a;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="animate__animated animate__fadeInDown">
+            <a href="index.html" class="back-btn">← Back to Portfolio</a>
+            <h1>⚙️ ADMIN DASHBOARD</h1>
+            <p style="color: #888; margin-top: 10px;">Manage your portfolio</p>
+        </header>
+        
+        <div id="successMessage" class="success-message"></div>
+        
+        <div class="dashboard-grid animate__animated animate__fadeIn">
+            <div class="stat-card">
+                <h3>Total Projects</h3>
+                <div class="stat-number" id="totalProjects">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Links</h3>
+                <div class="stat-number" id="totalLinks">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Visits</h3>
+                <div class="stat-number" id="totalVisits">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Completed</h3>
+                <div class="stat-number" id="completedProjects">0</div>
+            </div>
+        </div>
+        
+        <div class="section animate__animated animate__fadeInUp">
+            <h2 class="section-title">📊 Top Viewed Projects</h2>
+            <div id="topProjects" class="top-projects"></div>
+        </div>
+        
+        <div class="section animate__animated animate__fadeInUp" style="animation-delay: 0.1s">
+            <h2 class="section-title">➕ Add New Project</h2>
+            <form id="addProjectForm">
+                <div class="form-group">
+                    <label for="projectName">Project Name</label>
+                    <input type="text" id="projectName" required>
+                </div>
+                <div class="form-group">
+                    <label for="projectDescription">Description</label>
+                    <textarea id="projectDescription" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="projectTech">Tech Stack (comma separated)</label>
+                    <input type="text" id="projectTech" placeholder="HTML, CSS, JavaScript" required>
+                </div>
+                <div class="form-group">
+                    <label for="projectStatus">Status</label>
+                    <input type="text" id="projectStatus" placeholder="Completed / In Progress" required>
+                </div>
+                <button type="submit" class="btn">Add Project</button>
+            </form>
+        </div>
+        
+        <div class="section animate__animated animate__fadeInUp" style="animation-delay: 0.2s">
+            <h2 class="section-title">📁 All Projects</h2>
+            <div id="projectsList" class="project-list"></div>
+        </div>
+        
+        <div class="section animate__animated animate__fadeInUp" style="animation-delay: 0.3s">
+            <h2 class="section-title">🔗 Add New Link</h2>
+            <form id="addLinkForm">
+                <div class="form-group">
+                    <label for="linkName">Link Name</label>
+                    <input type="text" id="linkName" required>
+                </div>
+                <div class="form-group">
+                    <label for="linkUrl">URL</label>
+                    <input type="text" id="linkUrl" placeholder="https://..." required>
+                </div>
+                <button type="submit" class="btn">Add Link</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+        
+        window.addEventListener('DOMContentLoaded', async () => {
+            await loadDashboardStats();
+            await loadAllProjects();
+        });
+        
+        async function loadDashboardStats() {
+            try {
+                const response = await fetch(`${API_URL}/admin/stats`);
+                const stats = await response.json();
+                
+                document.getElementById('totalProjects').textContent = stats.projects.total;
+                document.getElementById('totalLinks').textContent = stats.links.total;
+                document.getElementById('totalVisits').textContent = stats.views.total_visits;
+                document.getElementById('completedProjects').textContent = stats.projects.completed;
+                
+                const statsResponse = await fetch(`${API_URL}/stats`);
+                const fullStats = await statsResponse.json();
+                
+                const topProjectsContainer = document.getElementById('topProjects');
+                if (fullStats.most_viewed_projects && fullStats.most_viewed_projects.length > 0) {
+                    topProjectsContainer.innerHTML = '';
+                    fullStats.most_viewed_projects.forEach(project => {
+                        const item = document.createElement('div');
+                        item.className = 'top-project-item';
+                        item.innerHTML = `
+                            <div>
+                                <h4>${project.name}</h4>
+                                <p style="color: #888; margin-top: 5px;">${project.description}</p>
+                            </div>
+                            <span class="views-badge">👁️ ${project.views} views</span>
+                        `;
+                        topProjectsContainer.appendChild(item);
+                    });
+                } else {
+                    topProjectsContainer.innerHTML = '<p style="color: #888;">No project views yet</p>';
+                }
+                
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+        
+        async function loadAllProjects() {
+            try {
+                const response = await fetch(`${API_URL}/projects`);
+                const projects = await response.json();
+                
+                const container = document.getElementById('projectsList');
+                container.innerHTML = '';
+                
+                projects.forEach((project, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'project-item';
+                    item.innerHTML = `
+                        <div class="project-info">
+                            <h4>${project.name}</h4>
+                            <p>${project.description}</p>
+                            <p style="margin-top: 5px;"><strong>Tech:</strong> ${project.tech}</p>
+                            <p><strong>Status:</strong> ${project.status}</p>
+                        </div>
+                        <div class="project-actions">
+                            <button class="btn btn-small btn-delete" onclick="deleteProject(${index + 1}, '${project.name}')">
+                                🗑️ Delete
+                            </button>
+                        </div>
+                    `;
+                    container.appendChild(item);
+                });
+                
+            } catch (error) {
+                console.error('Error loading projects:', error);
+            }
+        }
+        
+        document.getElementById('addProjectForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const project = {
+                name: document.getElementById('projectName').value,
+                description: document.getElementById('projectDescription').value,
+                tech: document.getElementById('projectTech').value,
+                status: document.getElementById('projectStatus').value
+            };
+            
+            try {
+                const response = await fetch(`${API_URL}/projects`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(project)
+                });
+                
+                if (response.ok) {
+                    showSuccess('✅ Project added successfully!');
+                    document.getElementById('addProjectForm').reset();
+                    await loadDashboardStats();
+                    await loadAllProjects();
+                }
+            } catch (error) {
+                console.error('Error adding project:', error);
+                showSuccess('❌ Error adding project!');
+            }
+        });
+        
+        document.getElementById('addLinkForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const link = {
+                name: document.getElementById('linkName').value,
+                url: document.getElementById('linkUrl').value
+            };
+            
+            try {
+                const response = await fetch(`${API_URL}/links`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(link)
+                });
+                
+                if (response.ok) {
+                    showSuccess('✅ Link added successfully!');
+                    document.getElementById('addLinkForm').reset();
+                    await loadDashboardStats();
+                }
+            } catch (error) {
+                console.error('Error adding link:', error);
+                showSuccess('❌ Error adding link!');
+            }
+        });
+        
+        async function deleteProject(id, name) {
+            if (!confirm(`Are you sure you want to delete "${name}"?`)) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_URL}/projects/${id}`, {
+                    method: 'DELETE'
+                });
+                
+                if (response.ok) {
+                    showSuccess('✅ Project deleted!');
+                    await loadDashboardStats();
+                    await loadAllProjects();
+                }
+            } catch (error) {
+                console.error('Error deleting project:', error);
+                showSuccess('❌ Error deleting project!');
+            }
+        }
+        
+        function showSuccess(message) {
+            const successDiv = document.getElementById('successMessage');
+            successDiv.textContent = message;
+            successDiv.classList.add('show');
+            
+            setTimeout(() => {
+                successDiv.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

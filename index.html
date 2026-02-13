@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muaves - Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+        
+        body.light-mode {
+            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 0;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #00ff88;
+            color: #0a0a0a;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.5);
+        }
+        
+        h1 {
+            font-size: 3em;
+            background: linear-gradient(45deg, #00ff88, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #888;
+            font-size: 1.2em;
+        }
+        
+        .search-bar {
+            max-width: 600px;
+            margin: 30px auto;
+            position: relative;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            border: 2px solid #00ff88;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            font-size: 1em;
+            outline: none;
+            transition: all 0.3s;
+        }
+        
+        body.light-mode .search-input {
+            background: white;
+            color: #333;
+        }
+        
+        .search-input:focus {
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+        }
+        
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2em;
+        }
+        
+        .filters {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        
+        .filter-btn {
+            background: rgba(0, 255, 136, 0.1);
+            border: 2px solid #00ff88;
+            color: #00ff88;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: #00ff88;
+            color: #0a0a0a;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        
+        .stat-box {
+            background: rgba(0, 255, 136, 0.1);
+            border: 2px solid #00ff88;
+            border-radius: 10px;
+            padding: 20px 40px;
+            text-align: center;
+            min-width: 150px;
+        }
+        
+        body.light-mode .stat-box {
+            background: white;
+        }
+        
+        .stat-number {
+            font-size: 2.5em;
+            color: #00ff88;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            color: #888;
+            margin-top: 5px;
+        }
+        
+        .section-title {
+            font-size: 2em;
+            color: #00ff88;
+            margin: 40px 0 20px 0;
+            text-align: center;
+        }
+        
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .project-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid #00ff88;
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        body.light-mode .project-card {
+            background: white;
+        }
+        
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .project-card:hover::before {
+            left: 100%;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 40px rgba(0, 255, 136, 0.3);
+        }
+        
+        .project-name {
+            color: #00ff88;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        
+        .project-description {
+            color: #ccc;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        
+        body.light-mode .project-description {
+            color: #666;
+        }
+        
+        .project-tech {
+            display: inline-block;
+            background: #00ff88;
+            color: #0a0a0a;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin: 5px 5px 5px 0;
+        }
+        
+        .project-status {
+            color: #00d4ff;
+            font-style: italic;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+        
+        .project-views {
+            color: #888;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        
+        .links-section {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 40px 0;
+        }
+        
+        .link-button {
+            background: linear-gradient(45deg, #00ff88, #00d4ff);
+            color: #0a0a0a;
+            padding: 15px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+        
+        .link-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 20px rgba(0, 255, 136, 0.5);
+        }
+        
+        #loading {
+            text-align: center;
+            font-size: 2em;
+            color: #00ff88;
+            padding: 100px 0;
+        }
+        
+        .error {
+            background: rgba(255, 0, 0, 0.1);
+            border: 2px solid #ff0044;
+            color: #ff0044;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 40px 0;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: #1a1a2e;
+            border: 2px solid #00ff88;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            position: relative;
+            animation: slideIn 0.3s;
+        }
+        
+        body.light-mode .modal-content {
+            background: white;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2em;
+            cursor: pointer;
+            color: #00ff88;
+            border: none;
+            background: none;
+        }
+        
+        .admin-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #00ff88;
+            color: #0a0a0a;
+            padding: 15px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 5px 20px rgba(0, 255, 136, 0.3);
+            transition: all 0.3s;
+        }
+        
+        .admin-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.5);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 30px 0;
+            color: #666;
+            border-top: 1px solid #333;
+        }
+        
+        body.light-mode footer {
+            border-top: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="animate__animated animate__fadeInDown">
+            <button class="theme-toggle" onclick="toggleTheme()">🌓 Theme</button>
+            <h1>🚀 MUAVES</h1>
+            <p class="subtitle">Developer & Creator</p>
+        </header>
+        
+        <div class="search-bar animate__animated animate__fadeIn">
+            <input type="text" 
+                   class="search-input" 
+                   id="searchInput"
+                   placeholder="🔍 Search projects..."
+                   oninput="searchProjects(this.value)">
+            <span class="search-icon">🔍</span>
+        </div>
+        
+        <div class="filters animate__animated animate__fadeIn">
+            <button class="filter-btn active" onclick="filterProjects('all')">All</button>
+            <button class="filter-btn" onclick="filterProjects('Completed')">Completed</button>
+            <button class="filter-btn" onclick="filterProjects('progress')">In Progress</button>
+            <button class="filter-btn" onclick="filterProjects('Coming')">Coming Soon</button>
+        </div>
+        
+        <div id="stats" class="stats"></div>
+        
+        <div id="loading">⏳ Loading portfolio...</div>
+        
+        <div id="content" style="display: none;">
+            <h2 class="section-title">📁 My Projects</h2>
+            <div id="projects" class="projects-grid"></div>
+            
+            <h2 class="section-title">🔗 Links</h2>
+            <div id="links" class="links-section"></div>
+        </div>
+        
+        <footer>
+            <p>Made with ❤️ by Muaves | Powered by Flask API</p>
+            <p style="margin-top: 10px; font-size: 0.9em;">Total Visits: <span id="totalVisits">0</span></p>
+        </footer>
+    </div>
+    
+    <div id="projectModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">×</button>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+    
+    <a href="admin.html" class="admin-btn animate__animated animate__bounceIn">⚙️ Admin</a>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+        let allProjects = [];
+        let currentFilter = 'all';
+        
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                await trackVisit();
+                await loadStats();
+                await loadProjects();
+                await loadLinks();
+                
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('content').style.display = 'block';
+                
+            } catch (error) {
+                document.getElementById('loading').innerHTML = `
+                    <div class="error animate__animated animate__shakeX">
+                        ❌ Error loading portfolio!<br>
+                        Make sure the API is running: <code>python3 api.py</code>
+                    </div>
+                `;
+                console.error('Error:', error);
+            }
+        });
+        
+        async function trackVisit() {
+            const response = await fetch(`${API_URL}/visit`, {
+                method: 'POST'
+            });
+            const data = await response.json();
+            document.getElementById('totalVisits').textContent = data.total_visits;
+        }
+        
+        async function loadStats() {
+            const response = await fetch(`${API_URL}/stats`);
+            const stats = await response.json();
+            
+            const statsContainer = document.getElementById('stats');
+            statsContainer.innerHTML = `
+                <div class="stat-box animate__animated animate__zoomIn">
+                    <div class="stat-number">${stats.total_projects}</div>
+                    <div class="stat-label">Projects</div>
+                </div>
+                <div class="stat-box animate__animated animate__zoomIn" style="animation-delay: 0.1s">
+                    <div class="stat-number">${stats.total_links}</div>
+                    <div class="stat-label">Links</div>
+                </div>
+                <div class="stat-box animate__animated animate__zoomIn" style="animation-delay: 0.2s">
+                    <div class="stat-number">${stats.total_visits}</div>
+                    <div class="stat-label">Visits</div>
+                </div>
+                <div class="stat-box animate__animated animate__zoomIn" style="animation-delay: 0.3s">
+                    <div class="stat-number">v${stats.version}</div>
+                    <div class="stat-label">Version</div>
+                </div>
+            `;
+        }
+        
+        async function loadProjects() {
+            const response = await fetch(`${API_URL}/projects`);
+            allProjects = await response.json();
+            displayProjects(allProjects);
+        }
+        
+        async function displayProjects(projects) {
+            const container = document.getElementById('projects');
+            container.innerHTML = '';
+            
+            for (let i = 0; i < projects.length; i++) {
+                const project = projects[i];
+                const projectId = allProjects.indexOf(project) + 1;
+                
+                const viewsResponse = await fetch(`${API_URL}/projects/${projectId}/views`);
+                const viewsData = await viewsResponse.json();
+                
+                const card = document.createElement('div');
+                card.className = 'project-card animate__animated animate__fadeInUp';
+                card.style.animationDelay = `${i * 0.1}s`;
+                card.onclick = () => openProjectModal(project, projectId);
+                
+                card.innerHTML = `
+                    <h3 class="project-name">${project.name}</h3>
+                    <p class="project-description">${project.description}</p>
+                    <div>
+                        <span class="project-tech">${project.tech}</span>
+                    </div>
+                    <p class="project-status">📌 ${project.status}</p>
+                    <p class="project-views">👁️ ${viewsData.views} views</p>
+                `;
+                
+                container.appendChild(card);
+            }
+        }
+        
+        async function openProjectModal(project, projectId) {
+            await fetch(`${API_URL}/projects/${projectId}/view`, {
+                method: 'POST'
+            });
+            
+            const viewsResponse = await fetch(`${API_URL}/projects/${projectId}/views`);
+            const viewsData = await viewsResponse.json();
+            
+            document.getElementById('modalBody').innerHTML = `
+                <h2 style="color: #00ff88; margin-bottom: 20px;">${project.name}</h2>
+                <p style="color: #ccc; line-height: 1.8; margin-bottom: 20px;">${project.description}</p>
+                <div style="margin: 20px 0;">
+                    <strong style="color: #00ff88;">Tech Stack:</strong>
+                    <p style="color: #ccc; margin-top: 10px;">${project.tech}</p>
+                </div>
+                <div style="margin: 20px 0;">
+                    <strong style="color: #00ff88;">Status:</strong>
+                    <p style="color: #00d4ff; margin-top: 10px;">${project.status}</p>
+                </div>
+                <div style="margin: 20px 0;">
+                    <strong style="color: #00ff88;">Views:</strong>
+                    <p style="color: #ccc; margin-top: 10px;">👁️ ${viewsData.views} people viewed this project</p>
+                </div>
+            `;
+            
+            document.getElementById('projectModal').classList.add('active');
+        }
+        
+        function closeModal() {
+            document.getElementById('projectModal').classList.remove('active');
+        }
+        
+        async function loadLinks() {
+            const response = await fetch(`${API_URL}/links`);
+            const links = await response.json();
+            
+            const container = document.getElementById('links');
+            
+            links.forEach((link, index) => {
+                const button = document.createElement('a');
+                button.href = link.url;
+                button.target = '_blank';
+                button.className = 'link-button animate__animated animate__bounceIn';
+                button.style.animationDelay = `${index * 0.1}s`;
+                button.textContent = link.name;
+                
+                container.appendChild(button);
+            });
+        }
+        
+        function searchProjects(query) {
+            query = query.toLowerCase();
+            const filtered = allProjects.filter(p => 
+                p.name.toLowerCase().includes(query) ||
+                p.description.toLowerCase().includes(query) ||
+                p.tech.toLowerCase().includes(query)
+            );
+            displayProjects(filtered);
+        }
+        
+        function filterProjects(filter) {
+            currentFilter = filter;
+            
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            if (filter === 'all') {
+                displayProjects(allProjects);
+            } else {
+                const filtered = allProjects.filter(p => 
+                    p.status.toLowerCase().includes(filter.toLowerCase())
+                );
+                displayProjects(filtered);
+            }
+        }
+        
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+        }
+        
+        window.addEventListener('load', () => {
+            if (localStorage.getItem('theme') === 'light') {
+                document.body.classList.add('light-mode');
+            }
+        });
+        
+        window.onclick = function(event) {
+            const modal = document.getElementById('projectModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+{
+  "version": "1.0.4",
+  "name": "Muaves",
+  "about": "Hi, Im Muaves a developer, mainly in HTML, CSS, JS, but i use other languages too. And I like to use animate.css :)",
+  "projects": [
+    {
+      "name": "Redstone Launcher",
+      "description": "The best launcher currently on the entire planet!",
+      "tech": "HTML, CSS, JS, Node.js",
+      "status": "Completed"
+    },
+    {
+      "name": "ProTiers",
+      "description": "Uhm smth with tiers",
+      "tech": "JavaScript, WebServer, HTML, CSS",
+      "status": "Completed"
+    },
+    {
+      "name": "LSZSZV",
+      "description": "The best calculator ever existed",
+      "tech": "HTML, CSS, JavaScript",
+      "status": "Completed, but not entirely"
+    },
+    {
+      "name": "Redstone CLI",
+      "description": "Redstone Launcher but faster and simpler",
+      "tech": "Rust, Bash",
+      "status": "Coming soon..."
+    },
+    {
+      "name": "Zenox Gaming",
+      "description": "A website for zenox(maybe its redstone launcher cuz its not configured set)",
+      "tech": "HTML, CSS, JavaScript, PHP",
+      "status": "Completed"
+    }
+  ],
+  "links": [
+    {
+      "name": "GitHub Profile",
+      "url": "https://github.com/muaves"
+    },
+    {
+      "name": "LSZSZV",
+      "url": "https://muaves.github.io/lszszv"
+    },
+    {
+      "name": "Personal Website",
+      "url": "https://muaves.github.io"
+    },
+    {
+      "name": "Redstone Launcher",
+      "url": "https://redstone-launcher.com"
+    },
+    {
+      "name": "Zenox Gaming",
+      "url": "https://zenoxgaming.github.io"
+    }
+  ],
+  "website": "https://muaves.github.io"
+}
