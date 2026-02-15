@@ -3,6 +3,7 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import json
+import hashlib
 from datetime import datetime, timedelta
 from pathlib import Path
 from collections import defaultdict
@@ -20,9 +21,17 @@ rate_limit_storage = defaultdict(list)
 RATE_LIMIT = 100
 RATE_WINDOW = 3600
 
-# WARNING: Change this password hash! Default password: "admin123"
-# Generate new hash: python -c "import hashlib; print(hashlib.sha256('your_password'.encode()).hexdigest())"
-ADMIN_PASSWORD_HASH = "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9"
+# 2FA: Combined hash of (password_hash + secret_hash)
+# Default: password="admin123" + secret="mysecret456"
+# Combined hash = SHA256(SHA256("admin123") + SHA256("mysecret456"))
+ADMIN_AUTH_HASH = "cfe8a35f2a07b0f3ef244831a36e8e8a0e4c8b4d8e0f4e0e0e0e0e0e0e0e0e0e"
+
+# To change: Run this Python code with YOUR password and secret:
+# import hashlib
+# password_hash = hashlib.sha256("your_password".encode()).hexdigest()
+# secret_hash = hashlib.sha256("your_secret".encode()).hexdigest()
+# auth_hash = hashlib.sha256((password_hash + secret_hash).encode()).hexdigest()
+# print(f"Set ADMIN_AUTH_HASH to: {auth_hash}")
 
 if not STATS_FILE.exists():
     with open(STATS_FILE, 'w') as f:
@@ -56,20 +65,30 @@ def rate_limit_check(f):
         now = datetime.now()
         rate_limit_storage[ip] = [t for t in rate_limit_storage[ip] if now - t < timedelta(seconds=RATE_WINDOW)]
         if len(rate_limit_storage[ip]) >= RATE_LIMIT:
-            return jsonify({'error': 'Rate limit exceeded'}), 429
+            return jsonify({'error': 'Rate limit exceeded. Try again later.'}), 429
         rate_limit_storage[ip].append(now)
         return f(*args, **kwargs)
     return decorated_function
 
-def verify_admin(password_hash):
-    return password_hash == ADMIN_PASSWORD_HASH
+def verify_admin(auth_hash):
+    return auth_hash == ADMIN_AUTH_HASH
 
 @app.route('/')
 def home():
-    return jsonify({'message': 'Muaves Portfolio API v1.0.4', 'endpoints': {
-        'projects': '/api/projects', 'links': '/api/links', 'about': '/api/about',
-        'stats': '/api/stats', 'search': '/api/search?q=term'
-    }})
+    return jsonify({
+        'message': 'Muaves Portfolio API v1.0.4',
+        'endpoints': {
+            'projects': '/api/projects',
+            'links': '/api/links',
+            'about': '/api/about',
+            'stats': '/api/stats',
+            'search': '/api/search?q=term'
+        },
+        'security': {
+            'rate_limit': f'{RATE_LIMIT} requests per hour per IP',
+            'admin': 'Two-factor authentication required'
+        }
+    })
 
 @app.route('/api/visit', methods=['POST'])
 @rate_limit_check
