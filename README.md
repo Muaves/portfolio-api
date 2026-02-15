@@ -1,33 +1,32 @@
-#  Muaves Portfolio API
+# Muaves Portfolio API
 
 > A modern, full-featured REST API powering my personal portfolio with real-time analytics, project management, and dynamic content delivery.
 
 [![API Status](https://img.shields.io/badge/status-online-success)](https://muaves-portfolio-api.onrender.com)
 [![Python Version](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![Flask Version](https://img.shields.io/badge/flask-3.0.0-lightgrey.svg)](https://flask.palletsprojects.com/)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![License](https://img.shields.io/badge/license-Private-red.svg)](LICENSE)
 [![Uptime](https://img.shields.io/uptimerobot/ratio/7/m797506512-c2c8e8e8e8e8e8e8e8e8e8e8)](https://stats.uptimerobot.com/pjTx4GKB5E)
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
-- [Overview](#-overview)
-- [Features](#-features)
-- [Demo](#-demo)
-- [Tech Stack](#-tech-stack)
-- [API Documentation](#-api-documentation)
-- [Getting Started](#-getting-started)
-- [Deployment](#-deployment)
-- [Monitoring](#-monitoring)
-- [Project Structure](#-project-structure)
-- [Contributing](#-contributing)
-- [License](#-license)
-- [Contact](#-contact)
+- [Overview](#overview)
+- [Features](#features)
+- [Demo](#demo)
+- [Tech Stack](#tech-stack)
+- [API Documentation](#api-documentation)
+- [Getting Started](#getting-started)
+- [Deployment](#deployment)
+- [Monitoring](#monitoring)
+- [Project Structure](#project-structure)
+- [License](#license)
+- [Contact](#contact)
 
 ---
 
-## 🎯 Overview
+## Overview
 
 This is the backend API for my personal portfolio website, built with Flask and deployed on Render. It provides RESTful endpoints for managing projects, links, analytics, and more. The API supports real-time view tracking, search functionality, filtering, and full CRUD operations for portfolio content.
 
@@ -37,22 +36,22 @@ This is the backend API for my personal portfolio website, built with Flask and 
 
 ---
 
-## ✨ Features
+## Features
 
--  **RESTful API** - Clean, intuitive endpoint design
--  **Analytics** - Track project views and visitor stats
--  **Search & Filter** - Find projects by name, tech stack, or status
--  **CRUD Operations** - Full create, read, update, delete support
--  **CORS Enabled** - Works with any frontend
--  **Real-time Stats** - Live visitor tracking and project metrics
--  **Admin Dashboard** - Manage content through intuitive interface
--  **Fast & Lightweight** - Optimized for performance
--  **Auto-scaling** - Handles traffic spikes gracefully
--  **JSON Storage** - Simple, portable data persistence
+- **RESTful API** - Clean, intuitive endpoint design
+- **Analytics** - Track project views and visitor stats
+- **Search & Filter** - Find projects by name, tech stack, or status
+- **CRUD Operations** - Full create, read, update, delete support
+- **CORS Enabled** - Works with any frontend
+- **Real-time Stats** - Live visitor tracking and project metrics
+- **Admin Dashboard** - Manage content through intuitive interface
+- **Fast & Lightweight** - Optimized for performance
+- **Auto-scaling** - Handles traffic spikes gracefully
+- **JSON Storage** - Simple, portable data persistence
 
 ---
 
-## 🎬 Demo
+## Demo
 
 ### API Response Example
 
@@ -92,7 +91,7 @@ GET /api/stats
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Technology | Purpose | Version |
 |------------|---------|---------|
@@ -106,7 +105,7 @@ GET /api/stats
 
 ---
 
-## 📚 API Documentation
+## API Documentation
 
 ### Base URL
 
@@ -116,7 +115,7 @@ https://muaves-portfolio-api.onrender.com
 
 ### Endpoints
 
-#### 🏠 Home
+#### Home
 
 ```http
 GET /
@@ -126,7 +125,7 @@ Returns API information and available endpoints.
 
 ---
 
-#### 📁 Projects
+#### Projects
 
 ##### Get All Projects
 
@@ -187,7 +186,7 @@ GET /api/projects/filter?tech=rust
 
 ---
 
-#### 🔍 Search
+#### Search
 
 ```http
 GET /api/search?q=redstone
@@ -197,7 +196,7 @@ Search projects by name, description, or technology.
 
 ---
 
-#### 🔗 Links
+#### Links
 
 ##### Get All Links
 
@@ -219,7 +218,7 @@ Content-Type: application/json
 
 ---
 
-#### 👁️ View Tracking
+#### View Tracking
 
 ##### Increment Project Views
 
@@ -235,7 +234,7 @@ GET /api/projects/{id}/views
 
 ---
 
-#### 📊 Analytics
+#### Analytics
 
 ##### Get Stats
 
@@ -263,7 +262,7 @@ Returns detailed admin dashboard statistics.
 
 ---
 
-#### ℹ️ About
+#### About
 
 ##### Get About
 
@@ -284,7 +283,7 @@ Content-Type: application/json
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -327,10 +326,34 @@ curl http://localhost:5000/api/stats
 
 ---
 
+## Deployment
 
+### Deploy to Render
 
+1. **Fork this repository**
 
-## 📡 Monitoring
+2. **Sign up at [Render.com](https://render.com)**
+
+3. **Create a new Web Service**
+   - Connect your GitHub repository
+   - Select `portfolio-api`
+   - Configure settings:
+     - **Environment:** Python 3
+     - **Build Command:** `pip install -r requirements.txt`
+     - **Start Command:** `gunicorn api:app`
+     - **Instance Type:** Free
+
+4. **Deploy**
+
+Your API will be live at: `https://your-app-name.onrender.com`
+
+### Environment Variables
+
+No environment variables required for basic setup. All configuration is done through `portfolio_data.json`.
+
+---
+
+## Monitoring
 
 This API uses [UptimeRobot](https://uptimerobot.com) for 24/7 uptime monitoring and status tracking.
 
@@ -338,14 +361,14 @@ This API uses [UptimeRobot](https://uptimerobot.com) for 24/7 uptime monitoring 
 
 Check the API status in real-time:
 
-🔗 **[stats.uptimerobot.com/pjTx4GKB5E](https://stats.uptimerobot.com/pjTx4GKB5E)**
+**[stats.uptimerobot.com/pjTx4GKB5E](https://stats.uptimerobot.com/pjTx4GKB5E)**
 
 The status page shows:
-- ✅ Current API status (Online/Offline)
-- 📊 Uptime percentage (24h, 7d, 30d, 90d)
-- 📈 Response time graphs
-- 🕐 Incident history
-- 🔔 Real-time alerts
+- Current API status (Online/Offline)
+- Uptime percentage (24h, 7d, 30d, 90d)
+- Response time graphs
+- Incident history
+- Real-time alerts
 
 ### Monitoring Details
 
@@ -359,14 +382,14 @@ The status page shows:
 
 UptimeRobot keeps the API alive by pinging it regularly, preventing the free Render instance from sleeping due to inactivity. This ensures:
 
-- 🚀 **Fast response times** for all visitors
-- 💪 **99.9% uptime** reliability
-- 📊 **Performance insights** and analytics
-- 🔔 **Instant alerts** if issues occur
+- Fast response times for all visitors
+- 99.9% uptime reliability
+- Performance insights and analytics
+- Instant alerts if issues occur
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```
 portfolio-api/
@@ -377,7 +400,7 @@ portfolio-api/
 ├── index.html            # Frontend homepage
 ├── admin.html            # Admin dashboard
 ├── README.md             # This file
-└── LICENSE               # MIT License
+└── LICENSE               # License file
 ```
 
 ### Key Files
@@ -391,7 +414,7 @@ portfolio-api/
 
 ---
 
-## 🎨 Frontend Integration
+## Frontend Integration
 
 ### Example: Fetch Projects
 
@@ -434,27 +457,7 @@ async function addProject() {
 
 ---
 
-## 🤝 Contributing
-
-Contributions are welcome! If you'd like to improve this API:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-### Development Guidelines
-
-- Follow PEP 8 style guide for Python code
-- Add comments for complex logic
-- Update documentation for new endpoints
-- Test all changes locally before pushing
-- Keep dependencies minimal and up-to-date
-
----
-
-## 🐛 Known Issues
+## Known Issues
 
 ### Render Free Tier Limitations
 
@@ -466,22 +469,22 @@ Contributions are welcome! If you'd like to improve this API:
 
 ---
 
-## 🔮 Future Enhancements
+## Future Enhancements
 
-- [ ] Add authentication for admin endpoints
-- [ ] Implement database (PostgreSQL/MongoDB) for better scalability
-- [ ] Add image upload support for projects
-- [ ] Create automated tests (pytest)
-- [ ] Add API rate limiting
-- [ ] Implement caching with Redis
-- [ ] Add GitHub API integration for automatic project sync
-- [ ] Create Swagger/OpenAPI documentation
-- [ ] Add webhook support for notifications
-- [ ] Implement GraphQL endpoint
+- Add authentication for admin endpoints
+- Implement database (PostgreSQL/MongoDB) for better scalability
+- Add image upload support for projects
+- Create automated tests (pytest)
+- Add API rate limiting
+- Implement caching with Redis
+- Add GitHub API integration for automatic project sync
+- Create Swagger/OpenAPI documentation
+- Add webhook support for notifications
+- Implement GraphQL endpoint
 
 ---
 
-## 📊 Performance
+## Performance
 
 | Metric | Value |
 |--------|-------|
@@ -493,39 +496,50 @@ Contributions are welcome! If you'd like to improve this API:
 
 ---
 
-## 📄 License
+## License
 
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+**Copyright (c) 2025 Muaves. All Rights Reserved.**
 
-### MIT License Summary
+This project and its source code are proprietary and confidential.
 
-✅ **Permissions:**
-- ✔️ Commercial use
-- ✔️ Modification
-- ✔️ Distribution
-- ✔️ Private use
+### Restrictions
 
-❌ **Limitations:**
-- ✖️ Liability
-- ✖️ Warranty
+**PRIVATE USE ONLY** - This software is for personal, non-commercial use only.
 
-📋 **Conditions:**
-- License and copyright notice must be included
+You are **NOT** permitted to:
+- Use this software for commercial purposes
+- Distribute or share this software
+- Modify or create derivative works
+- Sublicense or sell copies of this software
+- Use this software in any public-facing application without explicit permission
+
+### Permissions
+
+You **MAY**:
+- View the source code for educational purposes
+- Run the software locally for personal learning
+- Reference the architecture and design patterns
+
+### Disclaimer
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+For licensing inquiries or permission requests, please contact the author.
 
 ---
 
-## 👤 Contact
+## Contact
 
 **Muaves**
 
-- 🌐 Portfolio: [muaves.github.io/portfolio-api](https://muaves.github.io/portfolio-api)
-- 💼 GitHub: [@Muaves](https://github.com/Muaves)
-- 🔗 Website: [muaves.github.io](https://muaves.github.io)
-- 📧 Redstone Launcher: [redstone-launcher.com](https://redstone-launcher.com)
+- Portfolio: [muaves.github.io/portfolio-api](https://muaves.github.io/portfolio-api)
+- GitHub: [@Muaves](https://github.com/Muaves)
+- Website: [muaves.github.io](https://muaves.github.io)
+- Redstone Launcher: [redstone-launcher.com](https://redstone-launcher.com)
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - [Flask](https://flask.palletsprojects.com/) - The web framework that powers this API
 - [Render](https://render.com) - Hosting platform
@@ -536,7 +550,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ---
 
-## 📈 Statistics
+## Statistics
 
 ![GitHub Repo Size](https://img.shields.io/github/repo-size/Muaves/portfolio-api)
 ![GitHub Last Commit](https://img.shields.io/github/last-commit/Muaves/portfolio-api)
@@ -547,8 +561,6 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 <div align="center">
 
-**⭐ Star this repo if you found it helpful!**
-
-Made with ❤️ and ☕ by [Muaves](https://github.com/Muaves)
+Made by [Muaves](https://github.com/Muaves)
 
 </div>
