@@ -39,16 +39,16 @@ This is the backend API for my personal portfolio website, built with Flask and 
 
 ## ✨ Features
 
-- 🔐 **RESTful API** - Clean, intuitive endpoint design
-- 📊 **Analytics** - Track project views and visitor stats
-- 🔍 **Search & Filter** - Find projects by name, tech stack, or status
-- 📝 **CRUD Operations** - Full create, read, update, delete support
-- 🎨 **CORS Enabled** - Works with any frontend
-- 📈 **Real-time Stats** - Live visitor tracking and project metrics
-- 🌐 **Admin Dashboard** - Manage content through intuitive interface
-- ⚡ **Fast & Lightweight** - Optimized for performance
-- 🔄 **Auto-scaling** - Handles traffic spikes gracefully
-- 📦 **JSON Storage** - Simple, portable data persistence
+-  **RESTful API** - Clean, intuitive endpoint design
+-  **Analytics** - Track project views and visitor stats
+-  **Search & Filter** - Find projects by name, tech stack, or status
+-  **CRUD Operations** - Full create, read, update, delete support
+-  **CORS Enabled** - Works with any frontend
+-  **Real-time Stats** - Live visitor tracking and project metrics
+-  **Admin Dashboard** - Manage content through intuitive interface
+-  **Fast & Lightweight** - Optimized for performance
+-  **Auto-scaling** - Handles traffic spikes gracefully
+-  **JSON Storage** - Simple, portable data persistence
 
 ---
 
