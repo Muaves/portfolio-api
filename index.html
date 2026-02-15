@@ -1,23 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MUAVES - Portfolio</title>
-    
+
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'MS Sans Serif', Arial, sans-serif;
             background: #008080;
             padding: 20px;
         }
-        
+
         .window {
             max-width: 900px;
             margin: 0 auto;
@@ -26,7 +27,7 @@
             border-color: #ffffff #000000 #000000 #ffffff;
             box-shadow: 2px 2px 0 #000000;
         }
-        
+
         .title-bar {
             background: linear-gradient(to right, #000080, #1084d0);
             color: white;
@@ -35,18 +36,18 @@
             justify-content: space-between;
             align-items: center;
         }
-        
+
         .title-text {
             font-weight: bold;
             font-size: 14px;
             padding-left: 5px;
         }
-        
+
         .window-controls {
             display: flex;
             gap: 2px;
         }
-        
+
         .control-btn {
             width: 16px;
             height: 14px;
@@ -58,25 +59,25 @@
             line-height: 12px;
             cursor: pointer;
         }
-        
+
         .menu-bar {
             background: #c0c0c0;
             padding: 2px;
             border-bottom: 2px solid #ffffff;
         }
-        
+
         .menu-item {
             display: inline-block;
             padding: 4px 8px;
             cursor: pointer;
             font-size: 14px;
         }
-        
+
         .menu-item:hover {
             background: #000080;
             color: white;
         }
-        
+
         .content {
             background: white;
             padding: 20px;
@@ -85,7 +86,7 @@
             border-color: #808080 #ffffff #ffffff #808080;
             margin: 2px;
         }
-        
+
         .status-bar {
             background: #c0c0c0;
             padding: 2px 5px;
@@ -94,22 +95,22 @@
             display: flex;
             justify-content: space-between;
         }
-        
+
         .section {
             display: none;
         }
-        
+
         .section.active {
             display: block;
         }
-        
+
         h1 {
             font-size: 32px;
             color: #000080;
             margin-bottom: 10px;
             font-family: 'Times New Roman', serif;
         }
-        
+
         h2 {
             font-size: 24px;
             color: #000080;
@@ -117,7 +118,7 @@
             border-bottom: 2px solid #c0c0c0;
             padding-bottom: 5px;
         }
-        
+
         .button {
             background: #c0c0c0;
             border: 2px solid;
@@ -128,15 +129,15 @@
             font-size: 14px;
             margin: 5px;
         }
-        
+
         .button:active {
             border-color: #000000 #ffffff #ffffff #000000;
         }
-        
+
         .button:hover {
             background: #d4d0c8;
         }
-        
+
         .info-box {
             background: #c0c0c0;
             border: 2px solid;
@@ -144,7 +145,7 @@
             padding: 15px;
             margin: 15px 0;
         }
-        
+
         .project-box {
             background: white;
             border: 2px solid;
@@ -153,30 +154,30 @@
             margin: 10px 0;
             cursor: pointer;
         }
-        
+
         .project-box:hover {
             background: #f0f0f0;
         }
-        
+
         .project-title {
             font-weight: bold;
             color: #000080;
             margin-bottom: 5px;
             font-size: 16px;
         }
-        
+
         .project-desc {
             color: #000000;
             margin: 5px 0;
             line-height: 1.4;
         }
-        
+
         .project-tech {
             color: #808080;
             font-size: 12px;
             margin-top: 8px;
         }
-        
+
         .link-button {
             display: inline-block;
             background: #c0c0c0;
@@ -188,22 +189,22 @@
             color: #000000;
             font-weight: bold;
         }
-        
+
         .link-button:hover {
             background: #d4d0c8;
         }
-        
+
         .link-button:active {
             border-color: #000000 #ffffff #ffffff #000000;
         }
-        
+
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 10px;
             margin: 15px 0;
         }
-        
+
         .stat-box {
             background: #c0c0c0;
             border: 2px solid;
@@ -211,25 +212,25 @@
             padding: 15px;
             text-align: center;
         }
-        
+
         .stat-number {
             font-size: 32px;
             font-weight: bold;
             color: #000080;
         }
-        
+
         .stat-label {
             color: #000000;
             margin-top: 5px;
             font-size: 12px;
         }
-        
+
         #loading {
             text-align: center;
             padding: 50px;
             font-size: 18px;
         }
-        
+
         .admin-button {
             position: fixed;
             bottom: 20px;
@@ -242,7 +243,7 @@
             color: #000000;
             font-weight: bold;
         }
-        
+
         pre {
             background: white;
             border: 1px solid #808080;
@@ -250,8 +251,13 @@
             overflow-x: auto;
             font-family: 'Courier New', monospace;
         }
+
+        .footer-links a {
+            margin-left: 10px;
+        }
     </style>
 </head>
+
 <body>
     <div class="window">
         <div class="title-bar">
@@ -262,7 +268,7 @@
                 <div class="control-btn">X</div>
             </div>
         </div>
-        
+
         <div class="menu-bar">
             <span class="menu-item" onclick="showSection('home')">Home</span>
             <span class="menu-item" onclick="showSection('about')">About</span>
@@ -270,52 +276,47 @@
             <span class="menu-item" onclick="showSection('links')">Links</span>
             <span class="menu-item" onclick="showSection('stats')">Stats</span>
         </div>
-        
+
         <div class="content">
             <div id="loading">Loading portfolio data...</div>
-            
+
             <div id="sections" style="display: none;">
-                <!-- HOME -->
                 <div id="home" class="section active">
                     <h1>Welcome to my page!</h1>
-                    
+
                     <div class="info-box">
                         <h2 style="margin-top: 0;">Welcome, Visitor</h2>
                         <p style="line-height: 1.6;">
-                            Hi, Im Muaves a developer, mainly in HTML, CSS, JS, but i use other languages too. 
+                            Hi, Im Muaves a developer, mainly in HTML, CSS, JS, but i use other languages too.
                             And I like to use animate.css :)
                         </p>
                         <p style="margin-top: 10px; color: #808080; font-size: 12px;">
-                            This site is best viewed at 800x600 resolution with Netscape Navigator 4.0 or higher. 
+                            This site is best viewed at 800x600 resolution with Netscape Navigator 4.0 or higher.
                             Because its retro :).
                         </p>
                     </div>
-                    
+
                     <h2>Quick Stats</h2>
                     <div id="homeStats" class="stats-grid"></div>
                 </div>
-                
-                <!-- ABOUT -->
+
                 <div id="about" class="section">
                     <h1>About Me</h1>
                     <div class="info-box">
                         <pre id="aboutContent" style="background: #c0c0c0; border: none;">Loading...</pre>
                     </div>
                 </div>
-                
-                <!-- PROJECTS -->
+
                 <div id="projects" class="section">
                     <h1>My Projects</h1>
                     <div id="projectsGrid"></div>
                 </div>
-                
-                <!-- LINKS -->
+
                 <div id="links" class="section">
                     <h1>External Links</h1>
                     <div id="linksGrid"></div>
                 </div>
-                
-                <!-- STATS -->
+
                 <div id="stats" class="section">
                     <h1>System Statistics</h1>
                     <div id="statsGrid" class="stats-grid"></div>
@@ -324,27 +325,31 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="status-bar">
-            <span>Ready</span>
-            <span>Visitors: <span id="totalVisits">0</span></span>
+            <div class="footer-links">
+                <span title="In case if the API doesnt loads!">Useful links:</span>
+                <a href="https://muaves.com">My Website</a>
+                <a href="https://github.com/muaves/portfolio-api">Github</a>
+            </div>
+            <span style="margin-right: 10px;">Visitors: <span id="totalVisits">0</span></span>
         </div>
     </div>
-    
+
     <a href="admin.html" class="admin-button">Admin Panel</a>
 
     <script>
         const API_URL = window.location.hostname === 'localhost'
             ? 'http://localhost:5000/api'
             : 'https://muaves-portfolio-api.onrender.com/api';
-        
+
         let allProjects = [];
-        
+
         function showSection(sectionId) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.getElementById(sectionId).classList.add('active');
         }
-        
+
         window.addEventListener('DOMContentLoaded', async () => {
             try {
                 await trackVisit();
@@ -359,17 +364,17 @@
                 console.error('Error:', error);
             }
         });
-        
+
         async function trackVisit() {
             const response = await fetch(`${API_URL}/visit`, { method: 'POST' });
             const data = await response.json();
             document.getElementById('totalVisits').textContent = data.total_visits;
         }
-        
+
         async function loadStats() {
             const response = await fetch(`${API_URL}/stats`);
             const stats = await response.json();
-            
+
             const html = `
                 <div class="stat-box">
                     <div class="stat-number">${stats.total_projects}</div>
@@ -390,7 +395,7 @@
             `;
             document.getElementById('homeStats').innerHTML = html;
             document.getElementById('statsGrid').innerHTML = html;
-            
+
             const topProjects = document.getElementById('topProjects');
             if (stats.most_viewed_projects && stats.most_viewed_projects.length > 0) {
                 topProjects.innerHTML = stats.most_viewed_projects.map((p, i) => `
@@ -402,26 +407,26 @@
                 `).join('');
             }
         }
-        
+
         async function loadAbout() {
             const response = await fetch(`${API_URL}/about`);
             const data = await response.json();
             document.getElementById('aboutContent').textContent = data.about;
         }
-        
+
         async function loadProjects() {
             const response = await fetch(`${API_URL}/projects`);
             allProjects = await response.json();
-            
+
             const container = document.getElementById('projectsGrid');
             container.innerHTML = '';
-            
+
             for (let i = 0; i < allProjects.length; i++) {
                 const project = allProjects[i];
                 const projectId = i + 1;
                 const viewsResponse = await fetch(`${API_URL}/projects/${projectId}/views`);
                 const viewsData = await viewsResponse.json();
-                
+
                 const box = document.createElement('div');
                 box.className = 'project-box';
                 box.onclick = () => viewProject(project, projectId);
@@ -433,21 +438,22 @@
                 container.appendChild(box);
             }
         }
-        
+
         async function viewProject(project, projectId) {
             await fetch(`${API_URL}/projects/${projectId}/view`, { method: 'POST' });
             alert('PROJECT: ' + project.name + '\n\n' + project.description + '\n\nTech: ' + project.tech + '\nStatus: ' + project.status);
             loadProjects();
         }
-        
+
         async function loadLinks() {
             const response = await fetch(`${API_URL}/links`);
             const links = await response.json();
             const container = document.getElementById('linksGrid');
-            container.innerHTML = links.map(link => 
+            container.innerHTML = links.map(link =>
                 `<a href="${link.url}" target="_blank" class="link-button">${link.name}</a>`
             ).join('');
         }
     </script>
 </body>
+
 </html>
