@@ -1,4 +1,4 @@
-# 🚀 Muaves Portfolio API
+#  Muaves Portfolio API
 
 > A modern, full-featured REST API powering my personal portfolio with real-time analytics, project management, and dynamic content delivery.
 
