@@ -16,17 +16,16 @@ BASE_DIR = Path(__file__).parent
 DATA_FILE = BASE_DIR / 'portfolio_data.json'
 STATS_FILE = BASE_DIR / 'stats.json'
 
-# Rate limiting
 rate_limit_storage = defaultdict(list)
 RATE_LIMIT = 100
 RATE_WINDOW = 3600
 
-# 2FA: Combined hash of (password_hash + secret_hash)
+# 2fa: osszvont hash: (password_hash + secret_hash)
 # Default: password="admin123" + secret="mysecret456"
-# Combined hash = SHA256(SHA256("admin123") + SHA256("mysecret456"))
+# osszevont hash = SHA256(SHA256("admin123") + SHA256("mysecret456"))
 ADMIN_AUTH_HASH = "cfe8a35f2a07b0f3ef244831a36e8e8a0e4c8b4d8e0f4e0e0e0e0e0e0e0e0e0e"
 
-# To change: Run this Python code with YOUR password and secret:
+# megv.: futasd ezt a python szart a koddal a jelszavval meg a secrettel:
 # import hashlib
 # password_hash = hashlib.sha256("your_password".encode()).hexdigest()
 # secret_hash = hashlib.sha256("your_secret".encode()).hexdigest()
