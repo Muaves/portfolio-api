@@ -327,32 +327,8 @@ curl http://localhost:5000/api/stats
 
 ---
 
-## 🌐 Deployment
 
-### Deploy to Render
 
-1. **Fork this repository**
-
-2. **Sign up at [Render.com](https://render.com)**
-
-3. **Create a new Web Service**
-   - Connect your GitHub repository
-   - Select `portfolio-api`
-   - Configure settings:
-     - **Environment:** Python 3
-     - **Build Command:** `pip install -r requirements.txt`
-     - **Start Command:** `gunicorn api:app`
-     - **Instance Type:** Free
-
-4. **Deploy!**
-
-Your API will be live at: `https://your-app-name.onrender.com`
-
-### Environment Variables
-
-No environment variables required for basic setup. All configuration is done through `portfolio_data.json`.
-
----
 
 ## 📡 Monitoring
 
