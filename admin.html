@@ -172,7 +172,7 @@
     </style>
 </head>
 <body>
-    <!-- LOGIN -->
+    <!-- belpes -->
     <div id="loginScreen">
         <div class="window">
             <div class="title-bar">Admin Login Required</div>
@@ -201,7 +201,7 @@
         </div>
     </div>
 
-    <!-- ADMIN PANEL -->
+    <!-- Admin szar  -->
     <div id="adminPanel">
         <div class="window admin-window">
             <div class="title-bar">Admin Panel - Muaves Portfolio</div>
@@ -263,13 +263,13 @@
             ? 'http://localhost:5000/api'
             : 'https://muaves-portfolio-api.onrender.com/api';
         
-        // PASSWORD HASH (SHA-256 of "admin123")
+        // jelszav hashs (SHA-256 of "admin123")
         const PASSWORD_HASH = '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9';
         
-        // SECRET KEY HASH (SHA-256 of "mysecret456") - CHANGE THIS!
+        // titkos kulcs hash (SHA-256 of "mysecret456") - CHANGE THIS!
         const SECRET_HASH = 'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3';
         
-        // Combined auth hash (used for API)
+        // osszeszart hash (used for API)
         let AUTH_HASH = '';
         
         async function hashText(text) {
