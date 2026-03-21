@@ -33,6 +33,12 @@
       "tech": "HTML, CSS, JavaScript, PHP",
       "status": "Completed"
     }
+    {
+      "name": "Templix.",
+      "description": "Templix. is an open-source free html, css copy-paste component library",
+      "tech": "HTML, CSS, JavaScript, JSON",
+      "status": "Completed, but maintained"
+    }
   ],
   "links": [
     {
@@ -54,6 +60,10 @@
     {
       "name": "Zenox Gaming",
       "url": "https://zenoxgaming.github.io"
+    }
+    {
+      "name": "Templix.",
+      "url": "https://templix.muaves.com"
     }
   ],
   "website": "https://muaves.github.io"
