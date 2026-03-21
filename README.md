@@ -498,7 +498,7 @@ async function addProject() {
 
 ## License
 
-**Copyright (c) 2025 Muaves. All Rights Reserved.**
+**Copyright (c) 2026 Muaves. All Rights Reserved.**
 
 This project and its source code are proprietary and confidential.
 
