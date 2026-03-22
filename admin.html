@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login Required</title>
-    
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'MS Sans Serif', Arial, sans-serif;
             background: #008080;
@@ -17,7 +21,7 @@
             justify-content: center;
             padding: 20px;
         }
-        
+
         .window {
             width: 100%;
             max-width: 480px;
@@ -26,7 +30,7 @@
             border-color: #dfdfdf #0a0a0a #0a0a0a #dfdfdf;
             box-shadow: 1px 1px 0 #000000;
         }
-        
+
         .title-bar {
             background: linear-gradient(to right, #000080, #1084d0);
             color: white;
@@ -34,18 +38,18 @@
             font-weight: bold;
             font-size: 13px;
         }
-        
+
         .content {
             padding: 25px 20px 20px;
         }
-        
+
         h1 {
             color: #000080;
             font-size: 22px;
             margin-bottom: 20px;
             font-weight: bold;
         }
-        
+
         .info-box {
             background: white;
             border: 2px solid;
@@ -53,31 +57,33 @@
             padding: 12px;
             margin-bottom: 20px;
         }
-        
+
         .info-title {
             font-weight: bold;
             margin-bottom: 3px;
             font-size: 13px;
             text-transform: uppercase;
         }
-        
+
         .info-text {
             font-size: 13px;
             line-height: 1.3;
         }
-        
+
         .form-group {
             margin-bottom: 12px;
         }
-        
+
         label {
             display: block;
             margin-bottom: 4px;
             font-weight: bold;
             font-size: 13px;
         }
-        
-        input[type="password"], input[type="email"], input[type="text"] {
+
+        input[type="password"],
+        input[type="email"],
+        input[type="text"] {
             width: 100%;
             padding: 4px 5px;
             border: 2px solid;
@@ -86,11 +92,11 @@
             font-size: 13px;
             background: white;
         }
-        
+
         input:focus {
             outline: none;
         }
-        
+
         .button {
             width: 100%;
             background: #c0c0c0;
@@ -104,17 +110,17 @@
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-        
+
         .button:active {
             border-color: #000000 #ffffff #ffffff #000000;
             padding: 9px 7px 7px 9px;
         }
-        
+
         .button:disabled {
             color: #808080;
             cursor: default;
         }
-        
+
         .message {
             padding: 8px;
             margin-bottom: 15px;
@@ -122,27 +128,27 @@
             font-size: 12px;
             display: none;
         }
-        
+
         .message.error {
             background: #ffcccc;
             border-color: #cc0000;
             color: #cc0000;
         }
-        
+
         .message.success {
             background: #ccffcc;
             border-color: #00cc00;
             color: #006600;
         }
-        
+
         .step {
             display: none;
         }
-        
+
         .step.active {
             display: block;
         }
-        
+
         .timer {
             text-align: center;
             color: #000000;
@@ -152,14 +158,14 @@
             background: #dfdfdf;
             border: 1px solid #808080;
         }
-        
+
         .stat-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 10px;
             margin: 15px 0;
         }
-        
+
         .stat-box {
             background: #c0c0c0;
             border: 2px solid;
@@ -167,49 +173,44 @@
             padding: 15px;
             text-align: center;
         }
-        
+
         .stat-number {
             font-size: 28px;
             font-weight: bold;
             color: #000080;
         }
-        
+
         .stat-label {
             font-size: 11px;
             margin-top: 3px;
         }
-        
+
         .logout-btn {
             margin-top: 15px;
         }
     </style>
 </head>
+
 <body>
     <div id="loginStep" class="step active">
         <div class="window">
             <div class="title-bar">Admin Login Required</div>
-            
             <div class="content">
                 <h1>Enter Credentials</h1>
-                
                 <div class="info-box">
                     <div class="info-title">TWO-FACTOR AUTHENTICATION</div>
                     <div class="info-text">Both email AND password are required.</div>
                 </div>
-                
                 <div id="messageLogin" class="message"></div>
-                
                 <form id="loginForm">
                     <div class="form-group">
                         <label>Email:</label>
                         <input type="email" id="emailInput" required autofocus>
                     </div>
-                    
                     <div class="form-group">
                         <label>Password:</label>
                         <input type="password" id="passwordInput" required>
                     </div>
-                    
                     <div class="form-group" style="margin-top: 20px;">
                         <button type="submit" class="button" id="loginBtn">LOGIN</button>
                     </div>
@@ -217,62 +218,45 @@
             </div>
         </div>
     </div>
-
     <div id="emailStep" class="step">
         <div class="window">
             <div class="title-bar">Email Verification Required</div>
-            
             <div class="content">
                 <h1>Check Your Email</h1>
-                
                 <div class="info-box">
                     <div class="info-title">VERIFICATION CODE SENT</div>
                     <div class="info-text">A 6-digit code has been sent to muaves@protonmail.com</div>
                 </div>
-                
                 <div id="messageEmail" class="message"></div>
-                
                 <form id="codeForm">
                     <div class="form-group">
                         <label>Verification Code:</label>
                         <input type="text" id="codeInput" maxlength="6" placeholder="000000" required autofocus>
                     </div>
-                    
                     <div class="form-group" style="margin-top: 20px;">
                         <button type="submit" class="button" id="verifyBtn">VERIFY</button>
                     </div>
                 </form>
-                
                 <div class="timer" id="timer">Code expires in: <span id="countdown">10:00</span></div>
             </div>
         </div>
     </div>
-
     <div id="dashboard" class="step">
         <div class="window">
-            <div class="title-bar">Admin Dashboard - Muaves Portfolio</div>
-            
+            <div class="title-bar">Admin Dashboard</div>
             <div class="content">
                 <h1>Welcome Back!</h1>
-                
                 <div class="stat-grid" id="statsGrid"></div>
-                
                 <button class="button logout-btn" onclick="logout()">LOGOUT</button>
             </div>
         </div>
     </div>
-
     <script>
-        const API_URL = window.location.hostname === 'localhost'
-            ? 'http://localhost:5000/api'
-            : 'https://muaves-portfolio-api.onrender.com/api';
-        
+        const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:5000/api' : 'https://muaves-portfolio-api.onrender.com/api';
         const ADMIN_EMAIL = 'muaves@protonmail.com';
         const PASSWORD_HASH = '0f156174a802717010777e324024340d04085429184518420140220677840134';
-        
         let authToken = '';
         let expiresAt = null;
-        
         async function hashText(text) {
             const encoder = new TextEncoder();
             const data = encoder.encode(text);
@@ -280,33 +264,24 @@
             const hashArray = Array.from(new Uint8Array(hashBuffer));
             return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
         }
-        
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
             const email = document.getElementById('emailInput').value;
             const password = document.getElementById('passwordInput').value;
             const btn = document.getElementById('loginBtn');
             const msg = document.getElementById('messageLogin');
-            
             btn.disabled = true;
             btn.textContent = 'CHECKING...';
-            
             const passwordHash = await hashText(password);
-            
             if (email === ADMIN_EMAIL && passwordHash === PASSWORD_HASH) {
                 showMessage(msg, 'Credentials verified! Sending email code...', 'success');
-                
-                setTimeout(async () => {
-                    await requestEmailCode();
-                }, 1000);
+                setTimeout(async () => { await requestEmailCode(); }, 1000);
             } else {
                 showMessage(msg, 'Invalid email or password!', 'error');
                 btn.disabled = false;
                 btn.textContent = 'LOGIN';
             }
         });
-        
         async function requestEmailCode() {
             try {
                 const response = await fetch(`${API_URL}/admin/request-code`, {
@@ -314,9 +289,7 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email: ADMIN_EMAIL })
                 });
-                
                 const data = await response.json();
-                
                 if (response.ok) {
                     expiresAt = Date.now() + (data.expires_in * 1000);
                     showStep('emailStep');
@@ -324,140 +297,78 @@
                 } else {
                     showMessage(document.getElementById('messageLogin'), 'Failed to send email code', 'error');
                     document.getElementById('loginBtn').disabled = false;
-                    document.getElementById('loginBtn').textContent = 'LOGIN';
                 }
             } catch (error) {
                 showMessage(document.getElementById('messageLogin'), 'Network error', 'error');
                 document.getElementById('loginBtn').disabled = false;
-                document.getElementById('loginBtn').textContent = 'LOGIN';
             }
         }
-        
         document.getElementById('codeForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
             const code = document.getElementById('codeInput').value.trim();
             const btn = document.getElementById('verifyBtn');
             const msg = document.getElementById('messageEmail');
-            
-            if (code.length !== 6) {
-                showMessage(msg, 'Code must be 6 digits', 'error');
-                return;
-            }
-            
             btn.disabled = true;
-            btn.textContent = 'VERIFYING...';
-            
             try {
                 const response = await fetch(`${API_URL}/admin/verify-code`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email: ADMIN_EMAIL, code })
                 });
-                
                 const data = await response.json();
-                
                 if (response.ok) {
                     authToken = data.auth_token;
                     sessionStorage.setItem('authToken', authToken);
-                    
-                    showMessage(msg, 'Success! Loading dashboard...', 'success');
-                    
-                    setTimeout(() => {
-                        showStep('dashboard');
-                        loadDashboard();
-                    }, 1000);
+                    showMessage(msg, 'Success!', 'success');
+                    setTimeout(() => { showStep('dashboard'); loadDashboard(); }, 1000);
                 } else {
-                    showMessage(msg, data.error || 'Invalid code', 'error');
+                    showMessage(msg, 'Invalid code', 'error');
                     btn.disabled = false;
-                    btn.textContent = 'VERIFY';
                 }
             } catch (error) {
                 showMessage(msg, 'Network error', 'error');
                 btn.disabled = false;
-                btn.textContent = 'VERIFY';
             }
         });
-        
         function showStep(stepId) {
             document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
             document.getElementById(stepId).classList.add('active');
         }
-        
         function showMessage(element, text, type) {
             element.textContent = text;
             element.className = `message ${type}`;
             element.style.display = 'block';
         }
-        
         function startCountdown() {
             const countdownEl = document.getElementById('countdown');
-            
-            const interval = setInterval(() => {
+            setInterval(() => {
                 const remaining = expiresAt - Date.now();
-                
-                if (remaining <= 0) {
-                    clearInterval(interval);
-                    countdownEl.textContent = 'EXPIRED';
-                    showMessage(document.getElementById('messageEmail'), 'Code expired. Please login again.', 'error');
-                    return;
-                }
-                
+                if (remaining <= 0) { countdownEl.textContent = 'EXPIRED'; return; }
                 const minutes = Math.floor(remaining / 60000);
                 const seconds = Math.floor((remaining % 60000) / 1000);
                 countdownEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
             }, 1000);
         }
-        
         async function loadDashboard() {
             try {
                 const response = await fetch(`${API_URL}/admin/stats`, {
                     headers: { 'X-Auth-Token': authToken }
                 });
-                
                 const stats = await response.json();
-                
                 document.getElementById('statsGrid').innerHTML = `
-                    <div class="stat-box">
-                        <div class="stat-number">${stats.projects.total}</div>
-                        <div class="stat-label">Total Projects</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-number">${stats.projects.completed}</div>
-                        <div class="stat-label">Completed</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-number">${stats.links.total}</div>
-                        <div class="stat-label">Links</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-number">${stats.views.total_visits}</div>
-                        <div class="stat-label">Total Visits</div>
-                    </div>
+                    <div class="stat-box"><div class="stat-number">${stats.projects.total}</div><div class="stat-label">Total Projects</div></div>
+                    <div class="stat-box"><div class="stat-number">${stats.projects.completed}</div><div class="stat-label">Completed</div></div>
+                    <div class="stat-box"><div class="stat-number">${stats.links.total}</div><div class="stat-label">Links</div></div>
+                    <div class="stat-box"><div class="stat-number">${stats.views.total_visits}</div><div class="stat-label">Total Visits</div></div>
                 `;
-            } catch (error) {
-                console.error('Error:', error);
-            }
+            } catch (error) { console.error(error); }
         }
-        
-        function logout() {
-            sessionStorage.removeItem('authToken');
-            authToken = '';
-            showStep('loginStep');
-            document.getElementById('loginForm').reset();
-            document.getElementById('codeForm').reset();
-            document.getElementById('loginBtn').disabled = false;
-            document.getElementById('loginBtn').textContent = 'LOGIN';
-        }
-        
+        function logout() { sessionStorage.removeItem('authToken'); location.reload(); }
         window.addEventListener('DOMContentLoaded', () => {
             const savedToken = sessionStorage.getItem('authToken');
-            if (savedToken) {
-                authToken = savedToken;
-                showStep('dashboard');
-                loadDashboard();
-            }
+            if (savedToken) { authToken = savedToken; showStep('dashboard'); loadDashboard(); }
         });
     </script>
 </body>
+
 </html>
