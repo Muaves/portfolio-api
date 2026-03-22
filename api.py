@@ -3,8 +3,6 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import json
-import hashlib
-import random
 from datetime import datetime, timedelta
 from pathlib import Path
 from collections import defaultdict
@@ -20,7 +18,7 @@ DATA_FILE = BASE_DIR / 'portfolio_data.json'
 STATS_FILE = BASE_DIR / 'stats.json'
 
 rate_limit_storage = defaultdict(list)
-RATE_LIMIT = 100
+RATE_LIMIT = 200
 RATE_WINDOW = 3600
 
 def load_data():
@@ -32,21 +30,19 @@ def load_data():
         except:
             return {"projects": [], "links": [], "about": ""}
 
-def save_stats(stats):
-    with open(STATS_FILE, 'w', encoding='utf-8') as f:
-        json.dump(stats, f, indent=2)
-
 def load_stats():
     default_stats = {'total_visits': 0, 'project_views': {}, 'last_visit': None}
     if not STATS_FILE.exists():
-        save_stats(default_stats)
         return default_stats
     with open(STATS_FILE, 'r', encoding='utf-8') as f:
         try:
             return json.load(f)
         except:
-            save_stats(default_stats)
             return default_stats
+
+def save_stats(stats):
+    with open(STATS_FILE, 'w', encoding='utf-8') as f:
+        json.dump(stats, f, indent=2)
 
 def get_client_ip():
     if request.headers.getlist("X-Forwarded-For"):
@@ -69,7 +65,7 @@ def rate_limit_check(f):
 def home():
     return jsonify({
         'status': 'online',
-        'version': '1.0.7',
+        'version': '1.0.8',
         'endpoints': ['/api/projects', '/api/links', '/api/about', '/api/stats', '/api/visit']
     })
 
@@ -86,14 +82,6 @@ def track_visit():
 @rate_limit_check
 def get_projects():
     return jsonify(load_data().get('projects', []))
-
-@app.route('/api/projects/<int:id>')
-@rate_limit_check
-def get_project(id):
-    projects = load_data().get('projects', [])
-    if 0 <= id - 1 < len(projects):
-        return jsonify(projects[id - 1])
-    return jsonify({'error': 'Not found'}), 404
 
 @app.route('/api/projects/<int:id>/view', methods=['POST'])
 @rate_limit_check
@@ -112,6 +100,7 @@ def get_stats():
     stats = load_stats()
     projects = data.get('projects', [])
     views = stats.get('project_views', {})
+    
     sorted_views = sorted(views.items(), key=lambda x: x[1], reverse=True)[:3]
     top = []
     for pid, v in sorted_views:
@@ -122,6 +111,7 @@ def get_stats():
                 p['views'] = v
                 top.append(p)
         except: continue
+    
     return jsonify({
         'total_projects': len(projects),
         'total_visits': stats.get('total_visits', 0),
