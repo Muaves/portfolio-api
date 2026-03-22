@@ -4,146 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login Required</title>
-    
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: 'MS Sans Serif', Arial, sans-serif;
-            background: #008080;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        
-        .window {
-            width: 100%;
-            max-width: 480px;
-            background: #c0c0c0;
-            border: 3px solid;
-            border-color: #dfdfdf #0a0a0a #0a0a0a #dfdfdf;
-            box-shadow: 1px 1px 0 #000000;
-        }
-        
-        .title-bar {
-            background: linear-gradient(to right, #000080, #1084d0);
-            color: white;
-            padding: 3px 4px;
-            font-weight: bold;
-            font-size: 13px;
-        }
-        
-        .content {
-            padding: 25px 20px 20px;
-        }
-        
-        h1 {
-            color: #000080;
-            font-size: 22px;
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
-        
-        .info-box {
-            background: white;
-            border: 2px solid;
-            border-color: #808080 #ffffff #ffffff #808080;
-            padding: 12px;
-            margin-bottom: 20px;
-        }
-        
-        .info-title {
-            font-weight: bold;
-            margin-bottom: 3px;
-            font-size: 13px;
-            text-transform: uppercase;
-        }
-        
-        .info-text {
-            font-size: 13px;
-            line-height: 1.3;
-        }
-        
-        .form-group {
-            margin-bottom: 12px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 4px;
-            font-weight: bold;
-            font-size: 13px;
-        }
-        
-        input {
-            width: 100%;
-            padding: 4px 5px;
-            border: 2px solid;
-            border-color: #808080 #ffffff #ffffff #808080;
-            font-family: 'MS Sans Serif', Arial, sans-serif;
-            font-size: 13px;
-            background: white;
-        }
-        
+        body { font-family: 'MS Sans Serif', Arial, sans-serif; background: #008080; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .window { width: 100%; max-width: 480px; background: #c0c0c0; border: 3px solid; border-color: #dfdfdf #0a0a0a #0a0a0a #dfdfdf; box-shadow: 1px 1px 0 #000000; }
+        .title-bar { background: linear-gradient(to right, #000080, #1084d0); color: white; padding: 3px 4px; font-weight: bold; font-size: 13px; }
+        .content { padding: 25px 20px 20px; }
+        h1 { color: #000080; font-size: 22px; margin-bottom: 20px; font-weight: bold; }
+        .info-box { background: white; border: 2px solid; border-color: #808080 #ffffff #ffffff #808080; padding: 12px; margin-bottom: 20px; }
+        .info-title { font-weight: bold; margin-bottom: 3px; font-size: 13px; text-transform: uppercase; }
+        .info-text { font-size: 13px; line-height: 1.3; }
+        .form-group { margin-bottom: 12px; }
+        label { display: block; margin-bottom: 4px; font-weight: bold; font-size: 13px; }
+        input { width: 100%; padding: 4px 5px; border: 2px solid; border-color: #808080 #ffffff #ffffff #808080; font-family: 'MS Sans Serif', Arial, sans-serif; font-size: 13px; background: white; }
         input:focus { outline: none; }
-        
-        .button {
-            width: 100%;
-            background: #c0c0c0;
-            border: 2px solid;
-            border-color: #ffffff #000000 #000000 #ffffff;
-            padding: 8px;
-            font-family: 'MS Sans Serif', Arial, sans-serif;
-            font-size: 13px;
-            font-weight: bold;
-            cursor: pointer;
-            text-transform: uppercase;
-        }
-        
-        .button:active {
-            border-color: #000000 #ffffff #ffffff #000000;
-            padding: 9px 7px 7px 9px;
-        }
-        
-        .message {
-            padding: 8px;
-            margin-bottom: 15px;
-            border: 1px solid;
-            font-size: 12px;
-            display: none;
-            background: #ffcccc;
-            border-color: #cc0000;
-            color: #cc0000;
-        }
-        
+        .button { width: 100%; background: #c0c0c0; border: 2px solid; border-color: #ffffff #000000 #000000 #ffffff; padding: 8px; font-family: 'MS Sans Serif', Arial, sans-serif; font-size: 13px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
+        .button:active { border-color: #000000 #ffffff #ffffff #000000; padding: 9px 7px 7px 9px; }
+        .message { padding: 8px; margin-bottom: 15px; border: 1px solid; font-size: 12px; display: none; background: #ffcccc; border-color: #cc0000; color: #cc0000; }
         .step { display: none; }
         .step.active { display: block; }
-        
-        .stat-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin: 15px 0;
-        }
-        
-        .stat-box {
-            background: #c0c0c0;
-            border: 2px solid;
-            border-color: #ffffff #000000 #000000 #ffffff;
-            padding: 15px;
-            text-align: center;
-        }
-        
-        .stat-number {
-            font-size: 28px;
-            font-weight: bold;
-            color: #000080;
-        }
-        
+        .stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 15px 0; }
+        .stat-box { background: #c0c0c0; border: 2px solid; border-color: #ffffff #000000 #000000 #ffffff; padding: 15px; text-align: center; }
+        .stat-number { font-size: 28px; font-weight: bold; color: #000080; }
         .stat-label { font-size: 11px; margin-top: 3px; }
-        .logout-btn { margin-top: 15px; }
     </style>
 </head>
 <body>
@@ -154,17 +37,17 @@
                 <h1>Enter Credentials</h1>
                 <div class="info-box">
                     <div class="info-title">RESTRICTED AREA</div>
-                    <div class="info-text">Enter your admin email and password to continue.</div>
+                    <div class="info-text">Csak e-mail és jelszó kell a belépéshez.</div>
                 </div>
-                <div id="loginMsg" class="message">Invalid credentials!</div>
+                <div id="loginMsg" class="message">Hibás adatok!</div>
                 <form id="loginForm">
                     <div class="form-group">
                         <label>Email:</label>
-                        <input type="email" id="emailInput" required autofocus>
+                        <input type="email" id="emailInput" value="muaves@protonmail.com" required>
                     </div>
                     <div class="form-group">
                         <label>Password:</label>
-                        <input type="password" id="passwordInput" required>
+                        <input type="password" id="passwordInput" required autofocus>
                     </div>
                     <button type="submit" class="button">LOGIN</button>
                 </form>
@@ -174,42 +57,34 @@
 
     <div id="dashboard" class="step">
         <div class="window">
-            <div class="title-bar">Admin Dashboard - Muaves Portfolio</div>
+            <div class="title-bar">Admin Dashboard</div>
             <div class="content">
                 <h1>Welcome Back!</h1>
                 <div class="stat-grid" id="statsGrid"></div>
-                <button class="button logout-btn" onclick="logout()">LOGOUT</button>
+                <button class="button" onclick="logout()">LOGOUT</button>
             </div>
         </div>
     </div>
 
     <script>
         const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:5000/api' : 'https://muaves-portfolio-api.onrender.com/api';
-        const ADMIN_EMAIL = 'muaves@protonmail.com';
-        const AUTH_HASH = "0f156174a802717010777e324024340d04085429184518420140220677840134";
-
-        async function hashText(text) {
-            const encoder = new TextEncoder();
-            const data = encoder.encode(text);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        }
+        
+        // SIMA SZÖVEG, SEMMI HASH
+        const ADM_EMAIL = 'muaves@protonmail.com';
+        const ADM_PASS = 'TungTungTungSahur'; 
 
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('emailInput').value;
             const pass = document.getElementById('passwordInput').value;
-            const msg = document.getElementById('loginMsg');
             
-            const hashed = await hashText(pass);
-            
-            if (email === ADMIN_EMAIL && hashed === AUTH_HASH) {
-                sessionStorage.setItem('authToken', AUTH_HASH);
+            if (email === ADM_EMAIL && pass === ADM_PASS) {
+                // A tokennek elküldjük a sima jelszót, mert az API is ezt várja most már
+                sessionStorage.setItem('authToken', pass);
                 showStep('dashboard');
                 loadDashboard();
             } else {
-                msg.style.display = 'block';
+                document.getElementById('loginMsg').style.display = 'block';
             }
         });
 
@@ -232,13 +107,7 @@
         }
 
         function logout() { sessionStorage.removeItem('authToken'); location.reload(); }
-
-        window.onload = () => {
-            if (sessionStorage.getItem('authToken')) {
-                showStep('dashboard');
-                loadDashboard();
-            }
-        };
+        window.onload = () => { if (sessionStorage.getItem('authToken')) { showStep('dashboard'); loadDashboard(); } };
     </script>
 </body>
 </html>
