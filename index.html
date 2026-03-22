@@ -367,7 +367,7 @@
             await loadLinks();
 
         } catch (error) {
-            console.error("Initialization error:", error);
+            console.error(error);
         }
     }
 
@@ -419,21 +419,33 @@
         if (!res || !res.ok) return;
         allProjects = await res.json();
         
+        const statsRes = await fetch(`${API_URL}/stats`).catch(() => null);
+        const statsData = statsRes ? await statsRes.json() : { project_views: {} };
+        const viewCounts = statsData.project_views || {};
+
         const container = document.getElementById('projectsGrid');
         container.innerHTML = '';
 
         for (let i = 0; i < allProjects.length; i++) {
             const p = allProjects[i];
             const pId = i + 1;
+            const currentViews = viewCounts[pId] || 0;
 
             const box = document.createElement('div');
             box.className = 'project-box';
+            box.style.position = 'relative';
+            
             box.onclick = async () => {
                 await fetch(`${API_URL}/projects/${pId}/view`, { method: 'POST' }).catch(() => null);
                 alert(`PROJECT: ${p.name}\n\n${p.description}\n\nTech: ${p.tech}`);
                 loadProjects();
+                loadStats();
             };
+
             box.innerHTML = `
+                <div style="position: absolute; top: 5px; right: 10px; font-size: 10px; color: #808080;">
+                    Views: ${currentViews}
+                </div>
                 <div class="project-title">${p.name}</div>
                 <div class="project-desc">${p.description}</div>
                 <div class="project-tech">Tech: ${p.tech}</div>
