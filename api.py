@@ -13,6 +13,7 @@ import os
 
 app = Flask(__name__)
 CORS(app)
+app.url_map.strict_slashes = False
 
 BASE_DIR = Path(__file__).parent
 DATA_FILE = BASE_DIR / 'portfolio_data.json'
@@ -24,33 +25,28 @@ RATE_WINDOW = 3600
 
 def load_data():
     if not DATA_FILE.exists():
-        return {"projects": [], "links": [], "about": "Bio not found."}
+        return {"projects": [], "links": [], "about": ""}
     with open(DATA_FILE, 'r', encoding='utf-8') as f:
         try:
             return json.load(f)
-        except json.JSONDecodeError:
+        except:
             return {"projects": [], "links": [], "about": ""}
 
-def save_data(data):
-    with open(DATA_FILE, 'w', encoding='utf-8') as f:
-        json.dump(data, f, indent=2, ensure_ascii=False)
+def save_stats(stats):
+    with open(STATS_FILE, 'w', encoding='utf-8') as f:
+        json.dump(stats, f, indent=2)
 
 def load_stats():
     default_stats = {'total_visits': 0, 'project_views': {}, 'last_visit': None}
     if not STATS_FILE.exists():
         save_stats(default_stats)
         return default_stats
-    
     with open(STATS_FILE, 'r', encoding='utf-8') as f:
         try:
             return json.load(f)
-        except (json.JSONDecodeError, FileNotFoundError):
+        except:
             save_stats(default_stats)
             return default_stats
-
-def save_stats(stats):
-    with open(STATS_FILE, 'w', encoding='utf-8') as f:
-        json.dump(stats, f, indent=2)
 
 def get_client_ip():
     if request.headers.getlist("X-Forwarded-For"):
@@ -72,13 +68,9 @@ def rate_limit_check(f):
 @app.route('/')
 def home():
     return jsonify({
-        'message': 'Muaves Portfolio API v1.0.6',
-        'endpoints': {
-            'projects': '/api/projects',
-            'links': '/api/links',
-            'about': '/api/about',
-            'stats': '/api/stats'
-        }
+        'status': 'online',
+        'version': '1.0.7',
+        'endpoints': ['/api/projects', '/api/links', '/api/about', '/api/stats', '/api/visit']
     })
 
 @app.route('/api/visit', methods=['POST'])
@@ -98,8 +90,7 @@ def get_projects():
 @app.route('/api/projects/<int:id>')
 @rate_limit_check
 def get_project(id):
-    data = load_data()
-    projects = data.get('projects', [])
+    projects = load_data().get('projects', [])
     if 0 <= id - 1 < len(projects):
         return jsonify(projects[id - 1])
     return jsonify({'error': 'Not found'}), 404
@@ -109,8 +100,7 @@ def get_project(id):
 def increment_view(id):
     stats = load_stats()
     pid = str(id)
-    if 'project_views' not in stats:
-        stats['project_views'] = {}
+    if 'project_views' not in stats: stats['project_views'] = {}
     stats['project_views'][pid] = stats['project_views'].get(pid, 0) + 1
     save_stats(stats)
     return jsonify({'project_id': id, 'views': stats['project_views'][pid]})
@@ -121,27 +111,22 @@ def get_stats():
     data = load_data()
     stats = load_stats()
     projects = data.get('projects', [])
-    
-    project_views = stats.get('project_views', {})
-    sorted_views = sorted(project_views.items(), key=lambda x: x[1], reverse=True)[:3]
-    
-    top_projects = []
-    for pid, views in sorted_views:
+    views = stats.get('project_views', {})
+    sorted_views = sorted(views.items(), key=lambda x: x[1], reverse=True)[:3]
+    top = []
+    for pid, v in sorted_views:
         try:
             idx = int(pid) - 1
             if 0 <= idx < len(projects):
                 p = projects[idx].copy()
-                p['views'] = views
-                top_projects.append(p)
-        except ValueError:
-            continue
-    
+                p['views'] = v
+                top.append(p)
+        except: continue
     return jsonify({
         'total_projects': len(projects),
-        'total_links': len(data.get('links', [])),
         'total_visits': stats.get('total_visits', 0),
         'last_visit': stats.get('last_visit'),
-        'most_viewed_projects': top_projects
+        'top_projects': top
     })
 
 @app.route('/api/links')
@@ -155,5 +140,5 @@ def get_about():
     return jsonify({'about': load_data().get('about', '')})
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))
-    app.run(debug=False, port=port, host='0.0.0.0')
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host='0.0.0.0', port=port)
