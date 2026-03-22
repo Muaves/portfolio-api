@@ -1,196 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'MS Sans Serif', Arial, sans-serif;
-            background: #008080;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .window {
-            width: 100%;
-            max-width: 480px;
-            background: #c0c0c0;
-            border: 3px solid;
-            border-color: #dfdfdf #0a0a0a #0a0a0a #dfdfdf;
-            box-shadow: 1px 1px 0 #000000;
-        }
-
-        .title-bar {
-            background: linear-gradient(to right, #000080, #1084d0);
-            color: white;
-            padding: 3px 4px;
-            font-weight: bold;
-            font-size: 13px;
-        }
-
-        .content {
-            padding: 25px 20px 20px;
-        }
-
-        h1 {
-            color: #000080;
-            font-size: 22px;
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
-
-        .form-group {
-            margin-bottom: 12px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 4px;
-            font-weight: bold;
-            font-size: 13px;
-        }
-
-        input {
-            width: 100%;
-            padding: 4px 5px;
-            border: 2px solid;
-            border-color: #808080 #ffffff #ffffff #808080;
-            font-size: 13px;
-            background: white;
-        }
-
-        .button {
-            width: 100%;
-            background: #c0c0c0;
-            border: 2px solid;
-            border-color: #ffffff #000000 #000000 #ffffff;
-            padding: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
-        .button:active {
-            border-color: #000000 #ffffff #ffffff #000000;
-            padding: 9px 7px 7px 9px;
-        }
-
-        .message {
-            padding: 8px;
-            margin-bottom: 15px;
-            border: 1px solid;
-            font-size: 12px;
-            display: none;
-            background: #ffcccc;
-            color: #cc0000;
-        }
-
-        .step {
-            display: none;
-        }
-
-        .step.active {
-            display: block;
-        }
-
-        .stat-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin: 15px 0;
-        }
-
-        .stat-box {
-            background: #c0c0c0;
-            border: 2px solid;
-            border-color: #ffffff #000000 #000000 #ffffff;
-            padding: 15px;
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 28px;
-            font-weight: bold;
-            color: #000080;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'MS Sans Serif', Arial, sans-serif; background: #008080; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .window { width: 100%; max-width: 480px; background: #c0c0c0; border: 3px solid; border-color: #dfdfdf #0a0a0a #0a0a0a #dfdfdf; box-shadow: 1px 1px 0 #000000; }
+        .title-bar { background: linear-gradient(to right, #000080, #1084d0); color: white; padding: 3px 4px; font-weight: bold; font-size: 13px; }
+        .content { padding: 25px 20px 20px; }
+        h1 { color: #000080; font-size: 22px; margin-bottom: 20px; font-weight: bold; }
+        .form-group { margin-bottom: 12px; }
+        label { display: block; margin-bottom: 4px; font-weight: bold; font-size: 13px; }
+        input { width: 100%; padding: 4px 5px; border: 2px solid; border-color: #808080 #ffffff #ffffff #808080; font-family: 'MS Sans Serif', Arial, sans-serif; font-size: 13px; background: white; }
+        input:focus { outline: none; }
+        .button { width: 100%; background: #c0c0c0; border: 2px solid; border-color: #ffffff #000000 #000000 #ffffff; padding: 8px; font-family: 'MS Sans Serif', Arial, sans-serif; font-size: 13px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
+        .button:active { border-color: #000000 #ffffff #ffffff #000000; padding: 9px 7px 7px 9px; }
+        .message { padding: 8px; margin-bottom: 15px; border: 1px solid; font-size: 12px; display: none; background: #ffcccc; color: #cc0000; border-color: #cc0000; }
+        .step { display: none; }
+        .step.active { display: block; }
+        .stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 15px 0; }
+        .stat-box { background: #c0c0c0; border: 2px solid; border-color: #ffffff #000000 #000000 #ffffff; padding: 15px; text-align: center; }
+        .stat-number { font-size: 28px; font-weight: bold; color: #000080; }
+        .stat-label { font-size: 11px; margin-top: 3px; }
     </style>
 </head>
-
 <body>
     <div id="loginStep" class="step active">
         <div class="window">
-            <div class="title-bar">System Login</div>
+            <div class="title-bar">Admin Login</div>
             <div class="content">
-                <h1>Admin Access</h1>
-                <div id="loginMsg" class="message">Invalid credentials</div>
+                <h1>Enter Credentials</h1>
+                <div id="loginMsg" class="message">Invalid email or password!</div>
                 <form id="loginForm">
-                    <div class="form-group"><label>Email:</label><input type="email" id="email" required></div>
-                    <div class="form-group"><label>Password:</label><input type="password" id="pass" required></div>
+                    <div class="form-group">
+                        <label>Email:</label>
+                        <input type="email" id="emailInput" required autofocus>
+                    </div>
+                    <div class="form-group">
+                        <label>Password:</label>
+                        <input type="password" id="passwordInput" required>
+                    </div>
                     <button type="submit" class="button">LOGIN</button>
                 </form>
             </div>
         </div>
     </div>
 
-    <div id="dashStep" class="step">
+    <div id="dashboard" class="step">
         <div class="window">
-            <div class="title-bar">Dashboard</div>
+            <div class="title-bar">Admin Dashboard</div>
             <div class="content">
-                <h1>Live Stats</h1>
-                <div class="stat-grid" id="stats"></div>
+                <h1>Welcome Back!</h1>
+                <div class="stat-grid" id="statsGrid"></div>
                 <button class="button" onclick="logout()">LOGOUT</button>
             </div>
         </div>
     </div>
 
     <script>
-        const API = window.location.hostname === 'localhost' ? 'http://localhost:5000/api' : 'https://muaves-portfolio-api.onrender.com/api';
-        const ADM_EMAIL = 'muaves@protonmail.com';
-        const ADM_HASH = '0f156174a802717010777e324024340d04085429184518420140220677840134';
+        const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:5000/api' : 'https://muaves-portfolio-api.onrender.com/api';
+        const ADMIN_EMAIL = 'muaves@protonmail.com';
+        const ADMIN_AUTH_HASH = "0f156174a802717010777e324024340d04085429184518420140220677840134";
 
-        async function getHash(txt) {
-            const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(txt));
-            return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+        async function hashText(text) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(text);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
         }
 
-        document.getElementById('loginForm').onsubmit = async (e) => {
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const h = await getHash(document.getElementById('pass').value);
-            if (document.getElementById('email').value === ADM_EMAIL && h === ADM_HASH) {
-                sessionStorage.setItem('token', h);
-                loadDash();
+            const email = document.getElementById('emailInput').value;
+            const password = document.getElementById('passwordInput').value;
+            const msg = document.getElementById('loginMsg');
+            
+            const passwordHash = await hashText(password);
+            
+            if (email === ADMIN_EMAIL && passwordHash === ADMIN_AUTH_HASH) {
+                sessionStorage.setItem('token', ADMIN_AUTH_HASH);
+                showStep('dashboard');
+                loadDashboard();
             } else {
-                document.getElementById('loginMsg').style.display = 'block';
+                msg.style.display = 'block';
             }
-        };
+        });
 
-        async function loadDash() {
+        async function loadDashboard() {
             try {
-                const res = await fetch(`${API}/admin/stats`, { headers: { 'X-Auth-Token': sessionStorage.getItem('token') } });
-                const d = await res.json();
-                document.getElementById('stats').innerHTML = `
-                    <div class="stat-box"><div class="stat-number">${d.projects.total}</div><div>Projects</div></div>
-                    <div class="stat-box"><div class="stat-number">${d.views.total_visits}</div><div>Visits</div></div>
+                const response = await fetch(`${API_URL}/admin/stats`, {
+                    headers: { 'X-Auth-Token': sessionStorage.getItem('token') }
+                });
+                if (!response.ok) throw new Error();
+                const d = await response.json();
+                document.getElementById('statsGrid').innerHTML = `
+                    <div class="stat-box"><div class="stat-number">${d.projects.total}</div><div class="stat-label">Projects</div></div>
+                    <div class="stat-box"><div class="stat-number">${d.views.total_visits}</div><div class="stat-label">Total Visits</div></div>
                 `;
-                document.getElementById('loginStep').classList.remove('active');
-                document.getElementById('dashStep').classList.add('active');
             } catch (e) { logout(); }
         }
 
+        function showStep(id) {
+            document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
         function logout() { sessionStorage.removeItem('token'); location.reload(); }
-        if (sessionStorage.getItem('token')) loadDash();
+
+        window.onload = () => {
+            if (sessionStorage.getItem('token')) {
+                showStep('dashboard');
+                loadDashboard();
+            }
+        };
     </script>
 </body>
-
 </html>
