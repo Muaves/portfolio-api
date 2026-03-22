@@ -77,7 +77,7 @@
             font-size: 13px;
         }
         
-        input[type="password"] {
+        input[type="password"], input[type="email"], input[type="text"] {
             width: 100%;
             padding: 4px 5px;
             border: 2px solid;
@@ -194,20 +194,20 @@
                 
                 <div class="info-box">
                     <div class="info-title">TWO-FACTOR AUTHENTICATION</div>
-                    <div class="info-text">Both password AND secret key are required.</div>
+                    <div class="info-text">Both email AND password are required.</div>
                 </div>
                 
                 <div id="messageLogin" class="message"></div>
                 
                 <form id="loginForm">
                     <div class="form-group">
-                        <label>Password:</label>
-                        <input type="password" id="passwordInput" required autofocus>
+                        <label>Email:</label>
+                        <input type="email" id="emailInput" required autofocus>
                     </div>
                     
                     <div class="form-group">
-                        <label>Secret Key:</label>
-                        <input type="password" id="secretInput" required>
+                        <label>Password:</label>
+                        <input type="password" id="passwordInput" required>
                     </div>
                     
                     <div class="form-group" style="margin-top: 20px;">
@@ -268,9 +268,7 @@
             : 'https://muaves-portfolio-api.onrender.com/api';
         
         const ADMIN_EMAIL = 'muaves@protonmail.com';
-        
-        const PASSWORD_HASH = '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9';  
-        const SECRET_HASH = 'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3'; 
+        const PASSWORD_HASH = '388e6357463f0d575402506e76839e3f74070a7267104b283d5440751918490a';
         
         let authToken = '';
         let expiresAt = null;
@@ -286,8 +284,8 @@
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
+            const email = document.getElementById('emailInput').value;
             const password = document.getElementById('passwordInput').value;
-            const secret = document.getElementById('secretInput').value;
             const btn = document.getElementById('loginBtn');
             const msg = document.getElementById('messageLogin');
             
@@ -295,16 +293,15 @@
             btn.textContent = 'CHECKING...';
             
             const passwordHash = await hashText(password);
-            const secretHash = await hashText(secret);
             
-            if (passwordHash === PASSWORD_HASH && secretHash === SECRET_HASH) {
+            if (email === ADMIN_EMAIL && passwordHash === PASSWORD_HASH) {
                 showMessage(msg, 'Credentials verified! Sending email code...', 'success');
                 
                 setTimeout(async () => {
                     await requestEmailCode();
                 }, 1000);
             } else {
-                showMessage(msg, 'Invalid password or secret key!', 'error');
+                showMessage(msg, 'Invalid email or password!', 'error');
                 btn.disabled = false;
                 btn.textContent = 'LOGIN';
             }
