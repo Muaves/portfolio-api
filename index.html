@@ -340,23 +340,106 @@
 
    <script>
     const API_URL = 'https://muaves-portfolio-api.onrender.com/api';
+    let allProjects = [];
 
-    async function init() {
-        try {
-            const res = await fetch(`${API_URL}/stats`);
-            if (!res.ok) throw new Error();
-            const stats = await res.json();
-            
-            document.getElementById('totalVisits').textContent = stats.total_visits || 0;
-            document.getElementById('loading').style.display = 'none';
-            document.getElementById('sections').style.display = 'block';
-            
-            console.log("API is avaible, everything is OK!");
-        } catch (e) {
-            console.error(e);
-            document.getElementById('loading').innerHTML = "ERROR: API is down!";
+    function showSection(sectionId) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        const target = document.getElementById(sectionId);
+        if (target) {
+            target.classList.add('active');
         }
     }
+
+    async function init() {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('sections').style.display = 'block';
+
+        try {
+            const visitRes = await fetch(`${API_URL}/visit`, { method: 'POST' }).catch(() => null);
+            if (visitRes && visitRes.ok) {
+                const data = await visitRes.json();
+                document.getElementById('totalVisits').textContent = data.total_visits;
+            }
+
+            await loadStats();
+            await loadAbout();
+            await loadProjects();
+            await loadLinks();
+
+        } catch (error) {
+            document.getElementById('connStatus').textContent = "Offline";
+        }
+    }
+
+    async function loadStats() {
+        const res = await fetch(`${API_URL}/stats`).catch(() => null);
+        if (!res || !res.ok) return;
+        const stats = await res.json();
+        
+        const html = `
+            <div class="stat-box">
+                <div class="stat-number">${stats.total_projects || 0}</div>
+                <div class="stat-label">Projects</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">${stats.total_visits || 0}</div>
+                <div class="stat-label">Visits</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">1.0.8</div>
+                <div class="stat-label">Version</div>
+            </div>`;
+        
+        document.getElementById('homeStats').innerHTML = html;
+        document.getElementById('statsGrid').innerHTML = html;
+    }
+
+    async function loadAbout() {
+        const res = await fetch(`${API_URL}/about`).catch(() => null);
+        if (!res || !res.ok) return;
+        const data = await res.json();
+        document.getElementById('aboutContent').textContent = data.about;
+    }
+
+    async function loadProjects() {
+        const res = await fetch(`${API_URL}/projects`).catch(() => null);
+        if (!res || !res.ok) return;
+        allProjects = await res.json();
+        
+        const container = document.getElementById('projectsGrid');
+        container.innerHTML = '';
+
+        for (let i = 0; i < allProjects.length; i++) {
+            const p = allProjects[i];
+            const pId = i + 1;
+            const vRes = await fetch(`${API_URL}/projects/${pId}/views`).catch(() => null);
+            const vData = vRes ? await vRes.json() : { views: 0 };
+
+            const box = document.createElement('div');
+            box.className = 'project-box';
+            box.onclick = async () => {
+                await fetch(`${API_URL}/projects/${pId}/view`, { method: 'POST' }).catch(() => null);
+                alert(`PROJECT: ${p.name}\n\n${p.description}\n\nTech: ${p.tech}`);
+                loadProjects();
+            };
+            box.innerHTML = `
+                <div class="project-title">${p.name}</div>
+                <div class="project-desc">${p.description}</div>
+                <div class="project-tech">Tech: ${p.tech} | Views: ${vData.views || 0}</div>
+            `;
+            container.appendChild(box);
+        }
+    }
+
+    async function loadLinks() {
+        const res = await fetch(`${API_URL}/links`).catch(() => null);
+        if (!res || !res.ok) return;
+        const links = await res.json();
+        document.getElementById('linksGrid').innerHTML = links.map(l => 
+            `<a href="${l.url}" target="_blank" class="link-button">${l.name}</a>`
+        ).join('');
+    }
+
     window.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
