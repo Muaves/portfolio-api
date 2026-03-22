@@ -1,466 +1,228 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login Required</title>
-    
+    <title>Admin - Login</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'MS Sans Serif', Arial, sans-serif;
             background: #008080;
-            min-height: 100vh;
+            padding: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            min-height: 100vh;
         }
-        
+
         .window {
-            width: 100%;
-            max-width: 480px;
-            background: #c0c0c0;
-            border: 3px solid;
-            border-color: #dfdfdf #0a0a0a #0a0a0a #dfdfdf;
-            box-shadow: 1px 1px 0 #000000;
-        }
-        
-        .title-bar {
-            background: linear-gradient(to right, #000080, #1084d0);
-            color: white;
-            padding: 3px 4px;
-            font-weight: bold;
-            font-size: 13px;
-        }
-        
-        .content {
-            padding: 25px 20px 20px;
-        }
-        
-        h1 {
-            color: #000080;
-            font-size: 22px;
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
-        
-        .info-box {
-            background: white;
-            border: 2px solid;
-            border-color: #808080 #ffffff #ffffff #808080;
-            padding: 12px;
-            margin-bottom: 20px;
-        }
-        
-        .info-title {
-            font-weight: bold;
-            margin-bottom: 3px;
-            font-size: 13px;
-            text-transform: uppercase;
-        }
-        
-        .info-text {
-            font-size: 13px;
-            line-height: 1.3;
-        }
-        
-        .form-group {
-            margin-bottom: 12px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 4px;
-            font-weight: bold;
-            font-size: 13px;
-        }
-        
-        input[type="password"] {
-            width: 100%;
-            padding: 4px 5px;
-            border: 2px solid;
-            border-color: #808080 #ffffff #ffffff #808080;
-            font-family: 'MS Sans Serif', Arial, sans-serif;
-            font-size: 13px;
-            background: white;
-        }
-        
-        input:focus {
-            outline: none;
-        }
-        
-        .button {
-            width: 100%;
+            max-width: 500px;
             background: #c0c0c0;
             border: 2px solid;
             border-color: #ffffff #000000 #000000 #ffffff;
-            padding: 8px;
-            font-family: 'MS Sans Serif', Arial, sans-serif;
-            font-size: 13px;
-            font-weight: bold;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            box-shadow: 2px 2px 0 #000000;
         }
-        
+
+        .title-bar {
+            background: linear-gradient(to right, #000080, #1084d0);
+            color: white;
+            padding: 3px;
+            font-weight: bold;
+            font-size: 14px;
+            padding-left: 5px;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        h1 {
+            color: #000080;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .info {
+            background: white;
+            border: 2px solid;
+            border-color: #808080 #ffffff #ffffff #808080;
+            padding: 15px;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 5px;
+            border: 2px solid;
+            border-color: #808080 #ffffff #ffffff #808080;
+            font-family: 'MS Sans Serif', Arial, sans-serif;
+            font-size: 14px;
+        }
+
+        .button {
+            background: #c0c0c0;
+            border: 2px solid;
+            border-color: #ffffff #000000 #000000 #ffffff;
+            padding: 8px 20px;
+            cursor: pointer;
+            font-family: 'MS Sans Serif', Arial, sans-serif;
+            font-size: 14px;
+            width: 100%;
+            margin-top: 10px;
+        }
+
         .button:active {
             border-color: #000000 #ffffff #ffffff #000000;
-            padding: 9px 7px 7px 9px;
         }
-        
-        .button:disabled {
-            color: #808080;
-            cursor: default;
-        }
-        
-        .message {
-            padding: 8px;
-            margin-bottom: 15px;
-            border: 1px solid;
-            font-size: 12px;
+
+        .error {
+            background: #ff0000;
+            color: white;
+            padding: 10px;
+            margin-top: 15px;
+            border: 2px solid #800000;
             display: none;
         }
-        
-        .message.error {
-            background: #ffcccc;
-            border-color: #cc0000;
-            color: #cc0000;
-        }
-        
-        .message.success {
-            background: #ccffcc;
-            border-color: #00cc00;
-            color: #006600;
-        }
-        
-        .step {
+
+        /* Admin Panel */
+        #adminPanel {
             display: none;
         }
-        
-        .step.active {
-            display: block;
+
+        .admin-window {
+            max-width: 1000px;
+            margin: 0 auto;
         }
-        
-        .timer {
-            text-align: center;
-            color: #000000;
-            font-size: 12px;
-            margin-top: 12px;
-            padding: 8px;
-            background: #dfdfdf;
-            border: 1px solid #808080;
+
+        .menu-bar {
+            background: #c0c0c0;
+            padding: 2px;
+            border-bottom: 2px solid #ffffff;
         }
-        
-        .stat-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin: 15px 0;
+
+        .menu-item {
+            display: inline-block;
+            padding: 4px 8px;
+            cursor: pointer;
         }
-        
+
+        .menu-item:hover {
+            background: #000080;
+            color: white;
+        }
+
+        .admin-content {
+            background: white;
+            padding: 20px;
+            min-height: 500px;
+            border: 2px solid;
+            border-color: #808080 #ffffff #ffffff #808080;
+            margin: 2px;
+        }
+
         .stat-box {
             background: #c0c0c0;
             border: 2px solid;
             border-color: #ffffff #000000 #000000 #ffffff;
-            padding: 15px;
+            padding: 20px;
             text-align: center;
+            display: inline-block;
+            margin: 10px;
+            min-width: 150px;
         }
-        
+
         .stat-number {
-            font-size: 28px;
+            font-size: 32px;
             font-weight: bold;
             color: #000080;
         }
-        
-        .stat-label {
-            font-size: 11px;
-            margin-top: 3px;
+
+        .project-item {
+            background: #c0c0c0;
+            border: 2px solid;
+            border-color: #ffffff #000000 #000000 #ffffff;
+            padding: 15px;
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        
-        .logout-btn {
-            margin-top: 15px;
+
+        .success {
+            background: #00ff00;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #008000;
+            display: none;
         }
     </style>
 </head>
-<body>
-    <div id="loginStep" class="step active">
+
+<body><!-- belpes -->
+    <div id="loginScreen">
         <div class="window">
             <div class="title-bar">Admin Login Required</div>
-            
             <div class="content">
                 <h1>Enter Credentials</h1>
-                
-                <div class="info-box">
-                    <div class="info-title">TWO-FACTOR AUTHENTICATION</div>
-                    <div class="info-text">Both password AND secret key are required.</div>
-                </div>
-                
-                <div id="messageLogin" class="message"></div>
-                
-                <form id="loginForm">
-                    <div class="form-group">
-                        <label>Password:</label>
-                        <input type="password" id="passwordInput" required autofocus>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Secret Key:</label>
-                        <input type="password" id="secretInput" required>
-                    </div>
-                    
-                    <div class="form-group" style="margin-top: 20px;">
-                        <button type="submit" class="button" id="loginBtn">LOGIN</button>
-                    </div>
+                <div class="info"><strong>TWO-FACTOR AUTHENTICATION</strong><br>Both password AND secret key are
+                    required.</div>
+                <div class="form-group"><label>Password:</label><input type="password" id="passwordInput"
+                        onkeypress="if(event.key==='Enter') document.getElementById('secretInput').focus()"></div>
+                <div class="form-group"><label>Secret Key:</label><input type="password" id="secretInput"
+                        onkeypress="if(event.key==='Enter') login()"></div><button class="button"
+                    onclick="login()">LOGIN</button>
+                <div id="errorMsg" class="error">INVALID CREDENTIALS</div>
+            </div>
+        </div>
+    </div><!-- Admin szar  -->
+    <div id="adminPanel">
+        <div class="window admin-window">
+            <div class="title-bar">Admin Panel - Muaves Portfolio</div>
+            <div class="menu-bar"><span class="menu-item" onclick="logout()">Logout</span><span class="menu-item"
+                    onclick="location.href='index.html'">View Site</span></div>
+            <div class="admin-content">
+                <h1>Dashboard</h1>
+                <div id="successMsg" class="success"></div>
+                <div id="statsContainer"></div>
+                <h2 style="margin-top: 30px;">Add New Project</h2>
+                <form id="addProjectForm">
+                    <div class="form-group"><label>Name:</label><input type="text" id="projectName" required></div>
+                    <div class="form-group"><label>Description:</label><input type="text" id="projectDescription"
+                            required></div>
+                    <div class="form-group"><label>Tech:</label><input type="text" id="projectTech" required></div>
+                    <div class="form-group"><label>Status:</label><input type="text" id="projectStatus" required></div>
+                    <button type="submit" class="button">ADD PROJECT</button>
+                </form>
+                <h2 style="margin-top: 30px;">All Projects</h2>
+                <div id="projectsList"></div>
+                <h2 style="margin-top: 30px;">Add New Link</h2>
+                <form id="addLinkForm">
+                    <div class="form-group"><label>Name:</label><input type="text" id="linkName" required></div>
+                    <div class="form-group"><label>URL:</label><input type="text" id="linkUrl" required></div><button
+                        type="submit" class="button">ADD LINK</button>
                 </form>
             </div>
         </div>
     </div>
-
-    <div id="emailStep" class="step">
-        <div class="window">
-            <div class="title-bar">Email Verification Required</div>
-            
-            <div class="content">
-                <h1>Check Your Email</h1>
-                
-                <div class="info-box">
-                    <div class="info-title">VERIFICATION CODE SENT</div>
-                    <div class="info-text">A 6-digit code has been sent to muaves@protonmail.com</div>
-                </div>
-                
-                <div id="messageEmail" class="message"></div>
-                
-                <form id="codeForm">
-                    <div class="form-group">
-                        <label>Verification Code:</label>
-                        <input type="text" id="codeInput" maxlength="6" placeholder="000000" required autofocus>
-                    </div>
-                    
-                    <div class="form-group" style="margin-top: 20px;">
-                        <button type="submit" class="button" id="verifyBtn">VERIFY</button>
-                    </div>
-                </form>
-                
-                <div class="timer" id="timer">Code expires in: <span id="countdown">10:00</span></div>
-            </div>
-        </div>
-    </div>
-
-    <div id="dashboard" class="step">
-        <div class="window">
-            <div class="title-bar">Admin Dashboard - Muaves Portfolio</div>
-            
-            <div class="content">
-                <h1>Welcome Back!</h1>
-                
-                <div class="stat-grid" id="statsGrid"></div>
-                
-                <button class="button logout-btn" onclick="logout()">LOGOUT</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        const API_URL = window.location.hostname === 'localhost'
-            ? 'http://localhost:5000/api'
-            : 'https://muaves-portfolio-api.onrender.com/api';
-        
-        const ADMIN_EMAIL = 'muaves@protonmail.com';
-        
-        const PASSWORD_HASH = '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9';  
-        const SECRET_HASH = 'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3';  
-        
-        let authToken = '';
-        let expiresAt = null;
-        
-        async function hashText(text) {
-            const encoder = new TextEncoder();
-            const data = encoder.encode(text);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        }
-        
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const password = document.getElementById('passwordInput').value;
-            const secret = document.getElementById('secretInput').value;
-            const btn = document.getElementById('loginBtn');
-            const msg = document.getElementById('messageLogin');
-            
-            btn.disabled = true;
-            btn.textContent = 'CHECKING...';
-            
-            const passwordHash = await hashText(password);
-            const secretHash = await hashText(secret);
-            
-            if (passwordHash === PASSWORD_HASH && secretHash === SECRET_HASH) {
-                showMessage(msg, 'Credentials verified! Sending email code...', 'success');
-                
-                setTimeout(async () => {
-                    await requestEmailCode();
-                }, 1000);
-            } else {
-                showMessage(msg, 'Invalid password or secret key!', 'error');
-                btn.disabled = false;
-                btn.textContent = 'LOGIN';
-            }
-        });
-        
-        async function requestEmailCode() {
-            try {
-                const response = await fetch(`${API_URL}/admin/request-code`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: ADMIN_EMAIL })
-                });
-                
-                const data = await response.json();
-                
-                if (response.ok) {
-                    expiresAt = Date.now() + (data.expires_in * 1000);
-                    showStep('emailStep');
-                    startCountdown();
-                } else {
-                    showMessage(document.getElementById('messageLogin'), 'Failed to send email code', 'error');
-                    document.getElementById('loginBtn').disabled = false;
-                    document.getElementById('loginBtn').textContent = 'LOGIN';
-                }
-            } catch (error) {
-                showMessage(document.getElementById('messageLogin'), 'Network error', 'error');
-                document.getElementById('loginBtn').disabled = false;
-                document.getElementById('loginBtn').textContent = 'LOGIN';
-            }
-        }
-        
-        document.getElementById('codeForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const code = document.getElementById('codeInput').value.trim();
-            const btn = document.getElementById('verifyBtn');
-            const msg = document.getElementById('messageEmail');
-            
-            if (code.length !== 6) {
-                showMessage(msg, 'Code must be 6 digits', 'error');
-                return;
-            }
-            
-            btn.disabled = true;
-            btn.textContent = 'VERIFYING...';
-            
-            try {
-                const response = await fetch(`${API_URL}/admin/verify-code`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: ADMIN_EMAIL, code })
-                });
-                
-                const data = await response.json();
-                
-                if (response.ok) {
-                    authToken = data.auth_token;
-                    sessionStorage.setItem('authToken', authToken);
-                    
-                    showMessage(msg, 'Success! Loading dashboard...', 'success');
-                    
-                    setTimeout(() => {
-                        showStep('dashboard');
-                        loadDashboard();
-                    }, 1000);
-                } else {
-                    showMessage(msg, data.error || 'Invalid code', 'error');
-                    btn.disabled = false;
-                    btn.textContent = 'VERIFY';
-                }
-            } catch (error) {
-                showMessage(msg, 'Network error', 'error');
-                btn.disabled = false;
-                btn.textContent = 'VERIFY';
-            }
-        });
-        
-        function showStep(stepId) {
-            document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-            document.getElementById(stepId).classList.add('active');
-        }
-        
-        function showMessage(element, text, type) {
-            element.textContent = text;
-            element.className = `message ${type}`;
-            element.style.display = 'block';
-        }
-        
-        function startCountdown() {
-            const countdownEl = document.getElementById('countdown');
-            
-            const interval = setInterval(() => {
-                const remaining = expiresAt - Date.now();
-                
-                if (remaining <= 0) {
-                    clearInterval(interval);
-                    countdownEl.textContent = 'EXPIRED';
-                    showMessage(document.getElementById('messageEmail'), 'Code expired. Please login again.', 'error');
-                    return;
-                }
-                
-                const minutes = Math.floor(remaining / 60000);
-                const seconds = Math.floor((remaining % 60000) / 1000);
-                countdownEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-            }, 1000);
-        }
-        
-        async function loadDashboard() {
-            try {
-                const response = await fetch(`${API_URL}/admin/stats`, {
-                    headers: { 'X-Auth-Token': authToken }
-                });
-                
-                const stats = await response.json();
-                
-                document.getElementById('statsGrid').innerHTML = `
-                    <div class="stat-box">
-                        <div class="stat-number">${stats.projects.total}</div>
-                        <div class="stat-label">Total Projects</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-number">${stats.projects.completed}</div>
-                        <div class="stat-label">Completed</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-number">${stats.links.total}</div>
-                        <div class="stat-label">Links</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-number">${stats.views.total_visits}</div>
-                        <div class="stat-label">Total Visits</div>
-                    </div>
-                `;
-            } catch (error) {
-                console.error('Error:', error);
-            }
-        }
-        
-        function logout() {
-            sessionStorage.removeItem('authToken');
-            authToken = '';
-            showStep('loginStep');
-            document.getElementById('loginForm').reset();
-            document.getElementById('codeForm').reset();
-            document.getElementById('loginBtn').disabled = false;
-            document.getElementById('loginBtn').textContent = 'LOGIN';
-        }
-        
-        window.addEventListener('DOMContentLoaded', () => {
-            const savedToken = sessionStorage.getItem('authToken');
-            if (savedToken) {
-                authToken = savedToken;
-                showStep('dashboard');
-                loadDashboard();
-            }
-        });
-    </script>
+    <script>const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:5000/api' : 'https://muaves-portfolio-api.onrender.com/api';// jelszav hashs (SHA-256 of "admin123")const PASSWORD_HASH = '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9';// titkos kulcs hash (SHA-256 of "mysecret456") - CHANGE THIS!const SECRET_HASH = 'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3';// osszeszart hash (used for API)let AUTH_HASH = '';async function hashText(text) {const encoder = new TextEncoder();const data = encoder.encode(text);const hashBuffer = await crypto.subtle.digest('SHA-256', data);const hashArray = Array.from(new Uint8Array(hashBuffer));return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');}async function login() {const password = document.getElementById('passwordInput').value;const secret = document.getElementById('secretInput').value;const passwordHash = await hashText(password);const secretHash = await hashText(secret);if (passwordHash === PASSWORD_HASH && secretHash === SECRET_HASH) {// Create combined auth hashAUTH_HASH = await hashText(passwordHash + secretHash);sessionStorage.setItem('adminAuth', AUTH_HASH);document.getElementById('loginScreen').style.display = 'none';document.getElementById('adminPanel').style.display = 'block';loadDashboard();} else {const errorMsg = document.getElementById('errorMsg');errorMsg.style.display = 'block';setTimeout(() => errorMsg.style.display = 'none', 3000);}}function logout() {sessionStorage.removeItem('adminAuth');location.reload();}window.addEventListener('DOMContentLoaded', () => {const storedAuth = sessionStorage.getItem('adminAuth');if (storedAuth) {AUTH_HASH = storedAuth;document.getElementById('loginScreen').style.display = 'none';document.getElementById('adminPanel').style.display = 'block';loadDashboard();}});async function loadDashboard() {try {const response = await fetch(`${API_URL}/admin/stats`, {headers: { 'X-Auth-Hash': AUTH_HASH }});if (response.status === 401) {logout();return;}const stats = await response.json();document.getElementById('statsContainer').innerHTML = `<div class="stat-box"><div class="stat-number">${stats.projects.total}</div><div>Total Projects</div></div><div class="stat-box"><div class="stat-number">${stats.projects.completed}</div><div>Completed</div></div><div class="stat-box"><div class="stat-number">${stats.links.total}</div><div>Links</div></div><div class="stat-box"><div class="stat-number">${stats.views.total_visits}</div><div>Visits</div></div>`;await loadProjects();} catch (error) {console.error('Error:', error);}}async function loadProjects() {const response = await fetch(`${API_URL}/projects`);const projects = await response.json();document.getElementById('projectsList').innerHTML = projects.map((p, i) => `<div class="project-item"><div><strong>${p.name}</strong><br>${p.description}<br><small>Tech: ${p.tech} | Status: ${p.status}</small></div><button class="button" onclick="deleteProject(${i + 1}, '${p.name}')" style="width: auto;">DELETE</button></div>`).join('');}document.getElementById('addProjectForm').addEventListener('submit', async (e) => {e.preventDefault();const project = {name: document.getElementById('projectName').value,description: document.getElementById('projectDescription').value,tech: document.getElementById('projectTech').value,status: document.getElementById('projectStatus').value};try {await fetch(`${API_URL}/projects`, {method: 'POST',headers: {'Content-Type': 'application/json','X-Auth-Hash': AUTH_HASH},body: JSON.stringify(project)});showSuccess('PROJECT ADDED');document.getElementById('addProjectForm').reset();loadDashboard();} catch (error) {showSuccess('ERROR');}});document.getElementById('addLinkForm').addEventListener('submit', async (e) => {e.preventDefault();const link = {name: document.getElementById('linkName').value,url: document.getElementById('linkUrl').value};try {await fetch(`${API_URL}/links`, {method: 'POST',headers: {'Content-Type': 'application/json','X-Auth-Hash': AUTH_HASH},body: JSON.stringify(link)});showSuccess('LINK ADDED');document.getElementById('addLinkForm').reset();loadDashboard();} catch (error) {showSuccess('ERROR');}});async function deleteProject(id, name) {if (!confirm('Delete "' + name + '"?')) return;try {await fetch(`${API_URL}/projects/${id}`, {method: 'DELETE',headers: { 'X-Auth-Hash': AUTH_HASH }});showSuccess('DELETED');loadDashboard();} catch (error) {showSuccess('ERROR');}}function showSuccess(msg) {const el = document.getElementById('successMsg');el.textContent = msg;el.style.display = 'block';setTimeout(() => el.style.display = 'none', 3000);}</script>
 </body>
+
 </html>
