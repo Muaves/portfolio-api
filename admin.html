@@ -3,111 +3,185 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login Required</title>
+    <title>System Administration</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'MS Sans Serif', Arial, sans-serif; background: #008080; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        .window { width: 100%; max-width: 480px; background: #c0c0c0; border: 3px solid; border-color: #dfdfdf #0a0a0a #0a0a0a #dfdfdf; box-shadow: 1px 1px 0 #000000; }
-        .title-bar { background: linear-gradient(to right, #000080, #1084d0); color: white; padding: 3px 4px; font-weight: bold; font-size: 13px; }
-        .content { padding: 25px 20px 20px; }
-        h1 { color: #000080; font-size: 22px; margin-bottom: 20px; font-weight: bold; }
-        .info-box { background: white; border: 2px solid; border-color: #808080 #ffffff #ffffff #808080; padding: 12px; margin-bottom: 20px; }
-        .info-title { font-weight: bold; margin-bottom: 3px; font-size: 13px; text-transform: uppercase; }
-        .info-text { font-size: 13px; line-height: 1.3; }
-        .form-group { margin-bottom: 12px; }
-        label { display: block; margin-bottom: 4px; font-weight: bold; font-size: 13px; }
-        input { width: 100%; padding: 4px 5px; border: 2px solid; border-color: #808080 #ffffff #ffffff #808080; font-family: 'MS Sans Serif', Arial, sans-serif; font-size: 13px; background: white; }
-        input:focus { outline: none; }
-        .button { width: 100%; background: #c0c0c0; border: 2px solid; border-color: #ffffff #000000 #000000 #ffffff; padding: 8px; font-family: 'MS Sans Serif', Arial, sans-serif; font-size: 13px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
-        .button:active { border-color: #000000 #ffffff #ffffff #000000; padding: 9px 7px 7px 9px; }
-        .message { padding: 8px; margin-bottom: 15px; border: 1px solid; font-size: 12px; display: none; background: #ffcccc; border-color: #cc0000; color: #cc0000; }
+        /* Teljes Windows 95 UI stíluslap */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            -webkit-user-select: none; 
+            user-select: none; 
+        }
+
+        body {
+            font-family: 'MS Sans Serif', Arial, sans-serif;
+            background: #008080;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .window {
+            width: 100%;
+            max-width: 480px;
+            background: #c0c0c0;
+            border: 3px solid;
+            border-color: #dfdfdf #0a0a0a #0a0a0a #dfdfdf;
+            box-shadow: 1px 1px 0 #000000;
+        }
+
+        .title-bar {
+            background: linear-gradient(to right, #000080, #1084d0);
+            color: white;
+            padding: 3px 4px;
+            font-weight: bold;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .content {
+            padding: 25px 20px 20px;
+        }
+
+        h1 {
+            color: #000080;
+            font-size: 22px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 4px;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        input {
+            width: 100%;
+            padding: 5px;
+            border: 2px solid;
+            border-color: #808080 #ffffff #ffffff #808080;
+            font-family: 'MS Sans Serif', Arial, sans-serif;
+            font-size: 13px;
+            background: white;
+            outline: none;
+        }
+
+        .button {
+            width: 100%;
+            background: #c0c0c0;
+            border: 2px solid;
+            border-color: #ffffff #000000 #000000 #ffffff;
+            padding: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+
+        .button:active {
+            border-color: #000000 #ffffff #ffffff #000000;
+            padding: 11px 9px 9px 11px;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .stat-box {
+            background: #c0c0c0;
+            border: 2px solid;
+            border-color: #ffffff #000000 #000000 #ffffff;
+            padding: 20px 10px;
+            text-align: center;
+        }
+
+        .stat-num {
+            font-size: 32px;
+            font-weight: bold;
+            color: #000080;
+            display: block;
+        }
+
         .step { display: none; }
         .step.active { display: block; }
-        .stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 15px 0; }
-        .stat-box { background: #c0c0c0; border: 2px solid; border-color: #ffffff #000000 #000000 #ffffff; padding: 15px; text-align: center; }
-        .stat-number { font-size: 28px; font-weight: bold; color: #000080; }
-        .stat-label { font-size: 11px; margin-top: 3px; }
     </style>
 </head>
-<body>
-    <div id="loginStep" class="step active">
+<body oncontextmenu="return false;">
+    <div id="p1" class="step active">
         <div class="window">
-            <div class="title-bar">Admin Login Required</div>
+            <div class="title-bar"><span>Login.exe</span></div>
             <div class="content">
-                <h1>Enter Credentials</h1>
-                <div class="info-box">
-                    <div class="info-title">RESTRICTED AREA</div>
-                    <div class="info-text">Csak e-mail és jelszó kell a belépéshez.</div>
-                </div>
-                <div id="loginMsg" class="message">Hibás adatok!</div>
-                <form id="loginForm">
-                    <div class="form-group">
-                        <label>Email:</label>
-                        <input type="email" id="emailInput" value="muaves@protonmail.com" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Password:</label>
-                        <input type="password" id="passwordInput" required autofocus>
-                    </div>
-                    <button type="submit" class="button">LOGIN</button>
+                <h1>Admin Access</h1>
+                <form id="f1">
+                    <div class="form-group"><label>Email:</label><input type="text" id="u" required></div>
+                    <div class="form-group"><label>Password:</label><input type="password" id="p" required></div>
+                    <button type="submit" class="button">AUTHENTICATE</button>
                 </form>
             </div>
         </div>
     </div>
 
-    <div id="dashboard" class="step">
+    <div id="p2" class="step">
         <div class="window">
-            <div class="title-bar">Admin Dashboard</div>
+            <div class="title-bar"><span>Dashboard.sys</span></div>
             <div class="content">
-                <h1>Welcome Back!</h1>
-                <div class="stat-grid" id="statsGrid"></div>
-                <button class="button" onclick="logout()">LOGOUT</button>
+                <h1>Live Statistics</h1>
+                <div class="stat-grid" id="sg"></div>
+                <button class="button" onclick="lo()">LOGOUT</button>
             </div>
         </div>
     </div>
 
     <script>
-        const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:5000/api' : 'https://muaves-portfolio-api.onrender.com/api';
-        
-        // SIMA SZÖVEG, SEMMI HASH
-        const ADM_EMAIL = 'muaves@protonmail.com';
-        const ADM_PASS = 'TungTungTungSahur'; 
+        const _URL = 'https://muaves-portfolio-api.onrender.com/api';
+        const _ID = 'muaves@protonmail.com';
+        const _KEY = 'TungTungTungSahur';
 
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        document.onkeydown = (e) => {
+            if (e.ctrlKey && (e.key === 'u' || e.key === 's')) return false;
+            if (e.key === 'F12') return false;
+        };
+
+        document.getElementById('f1').onsubmit = async (e) => {
             e.preventDefault();
-            const email = document.getElementById('emailInput').value;
-            const pass = document.getElementById('passwordInput').value;
-            
-            if (email === ADM_EMAIL && pass === ADM_PASS) {
-                // A tokennek elküldjük a sima jelszót, mert az API is ezt várja most már
-                sessionStorage.setItem('authToken', pass);
-                showStep('dashboard');
-                loadDashboard();
-            } else {
-                document.getElementById('loginMsg').style.display = 'block';
+            if (document.getElementById('u').value === _ID && document.getElementById('p').value === _KEY) {
+                sessionStorage.setItem('_auth', _KEY);
+                ld();
             }
-        });
+        };
 
-        async function loadDashboard() {
+        async function ld() {
             try {
-                const response = await fetch(`${API_URL}/admin/stats`, {
-                    headers: { 'X-Auth-Token': sessionStorage.getItem('authToken') }
+                const r = await fetch(`${_URL}/admin/stats`, {
+                    headers: { 'X-Auth-Token': sessionStorage.getItem('_auth') }
                 });
-                const d = await response.json();
-                document.getElementById('statsGrid').innerHTML = `
-                    <div class="stat-box"><div class="stat-number">${d.projects.total}</div><div class="stat-label">Projects</div></div>
-                    <div class="stat-box"><div class="stat-number">${d.views.total_visits}</div><div class="stat-label">Visits</div></div>
+                const d = await r.json();
+                document.getElementById('sg').innerHTML = `
+                    <div class="stat-box"><span class="stat-num">${d.projects.total}</span><span>PROJECTS</span></div>
+                    <div class="stat-box"><span class="stat-num">${d.views.total_visits}</span><span>VISITS</span></div>
                 `;
-            } catch (e) { logout(); }
+                document.getElementById('p1').classList.remove('active');
+                document.getElementById('p2').classList.add('active');
+            } catch(e) { lo(); }
         }
 
-        function showStep(id) {
-            document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-        }
-
-        function logout() { sessionStorage.removeItem('authToken'); location.reload(); }
-        window.onload = () => { if (sessionStorage.getItem('authToken')) { showStep('dashboard'); loadDashboard(); } };
+        function lo() { sessionStorage.clear(); location.reload(); }
+        window.onload = () => { if(sessionStorage.getItem('_auth')) ld(); };
     </script>
 </body>
 </html>
