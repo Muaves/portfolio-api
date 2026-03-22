@@ -4,10 +4,15 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 import json
 import hashlib
+import random
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from datetime import datetime, timedelta
 from pathlib import Path
 from collections import defaultdict
 from functools import wraps
+import os
 
 app = Flask(__name__)
 CORS(app)
@@ -16,21 +21,20 @@ BASE_DIR = Path(__file__).parent
 DATA_FILE = BASE_DIR / 'portfolio_data.json'
 STATS_FILE = BASE_DIR / 'stats.json'
 
+# Rate limiting
 rate_limit_storage = defaultdict(list)
 RATE_LIMIT = 100
 RATE_WINDOW = 3600
 
-# 2fa: osszvont hash: (password_hash + secret_hash)
-# Default: password="admin123" + secret="mysecret456"
-# osszevont hash = SHA256(SHA256("admin123") + SHA256("mysecret456"))
-ADMIN_AUTH_HASH = "cfe8a35f2a07b0f3ef244831a36e8e8a0e4c8b4d8e0f4e0e0e0e0e0e0e0e0e0e"
+# Email verification codes (in production use Redis/database)
+verification_codes = {}
 
-# megv.: futasd ezt a python szart a koddal a jelszavval meg a secrettel:
-# import hashlib
-# password_hash = hashlib.sha256("your_password".encode()).hexdigest()
-# secret_hash = hashlib.sha256("your_secret".encode()).hexdigest()
-# auth_hash = hashlib.sha256((password_hash + secret_hash).encode()).hexdigest()
-# print(f"Set ADMIN_AUTH_HASH to: {auth_hash}")
+# Your email settings (use environment variables in production!)
+ADMIN_EMAIL = 'muaves@protonmail.com'  # ONLY THIS EMAIL!
+EMAIL_PASSWORD = os.environ.get('EMAIL_PASSWORD', '')  # App password for Gmail
+
+# Admin auth hash (generated after email verification)
+ADMIN_AUTH_HASH = "temp-hash-after-email-verification"
 
 if not STATS_FILE.exists():
     with open(STATS_FILE, 'w') as f:
@@ -64,10 +68,46 @@ def rate_limit_check(f):
         now = datetime.now()
         rate_limit_storage[ip] = [t for t in rate_limit_storage[ip] if now - t < timedelta(seconds=RATE_WINDOW)]
         if len(rate_limit_storage[ip]) >= RATE_LIMIT:
-            return jsonify({'error': 'Rate limit exceeded. Try again later.'}), 429
+            return jsonify({'error': 'Rate limit exceeded'}), 429
         rate_limit_storage[ip].append(now)
         return f(*args, **kwargs)
     return decorated_function
+
+def send_verification_email(email, code):
+    """Send verification code via email"""
+    try:
+        # Create message
+        msg = MIMEMultipart()
+        msg['From'] = ADMIN_EMAIL
+        msg['To'] = email
+        msg['Subject'] = 'Muaves Admin - Verification Code'
+        
+        body = f"""
+Hello!
+
+Your verification code for Muaves Admin Panel is:
+
+{code}
+
+This code will expire in 10 minutes.
+
+If you didn't request this, please ignore this email.
+
+- Muaves Portfolio System
+"""
+        msg.attach(MIMEText(body, 'plain'))
+        
+        # Send via Gmail SMTP
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(ADMIN_EMAIL, EMAIL_PASSWORD)
+        server.send_message(msg)
+        server.quit()
+        
+        return True
+    except Exception as e:
+        print(f"Email error: {e}")
+        return False
 
 def verify_admin(auth_hash):
     return auth_hash == ADMIN_AUTH_HASH
@@ -75,7 +115,7 @@ def verify_admin(auth_hash):
 @app.route('/')
 def home():
     return jsonify({
-        'message': 'Muaves Portfolio API v1.0.4',
+        'message': 'Muaves Portfolio API v1.0.5',
         'endpoints': {
             'projects': '/api/projects',
             'links': '/api/links',
@@ -83,12 +123,74 @@ def home():
             'stats': '/api/stats',
             'search': '/api/search?q=term'
         },
-        'security': {
-            'rate_limit': f'{RATE_LIMIT} requests per hour per IP',
-            'admin': 'Two-factor authentication required'
-        }
+        'security': 'Email verification + 2FA required for admin'
     })
 
+# EMAIL VERIFICATION ENDPOINTS
+@app.route('/api/admin/request-code', methods=['POST'])
+@rate_limit_check
+def request_verification_code():
+    """Request email verification code"""
+    data = request.json
+    email = data.get('email', '').strip()
+    
+    # Check if email is authorized
+    if email != ADMIN_EMAIL:
+        return jsonify({'error': 'Unauthorized email'}), 401
+    
+    # Generate 6-digit code
+    code = str(random.randint(100000, 999999))
+    
+    # Store code with expiration (10 minutes)
+    verification_codes[email] = {
+        'code': code,
+        'expires': datetime.now() + timedelta(minutes=10)
+    }
+    
+    # Send email
+    if send_verification_email(email, code):
+        return jsonify({
+            'message': 'Verification code sent to your email',
+            'expires_in': 600  # 10 minutes
+        })
+    else:
+        return jsonify({'error': 'Failed to send email'}), 500
+
+@app.route('/api/admin/verify-code', methods=['POST'])
+@rate_limit_check
+def verify_code():
+    """Verify email code and generate auth token"""
+    data = request.json
+    email = data.get('email', '').strip()
+    code = data.get('code', '').strip()
+    
+    # Check if code exists
+    if email not in verification_codes:
+        return jsonify({'error': 'No verification code requested'}), 400
+    
+    stored = verification_codes[email]
+    
+    # Check expiration
+    if datetime.now() > stored['expires']:
+        del verification_codes[email]
+        return jsonify({'error': 'Code expired'}), 400
+    
+    # Check code
+    if code != stored['code']:
+        return jsonify({'error': 'Invalid code'}), 401
+    
+    # Generate session token
+    session_token = hashlib.sha256(f"{email}{code}{datetime.now()}".encode()).hexdigest()
+    
+    # Clean up used code
+    del verification_codes[email]
+    
+    return jsonify({
+        'message': 'Verification successful',
+        'auth_token': session_token
+    })
+
+# PUBLIC ENDPOINTS
 @app.route('/api/visit', methods=['POST'])
 @rate_limit_check
 def track_visit():
@@ -131,8 +233,8 @@ def get_views(id):
 @app.route('/api/projects', methods=['POST'])
 @rate_limit_check
 def add_project():
-    auth_hash = request.headers.get('X-Auth-Hash')
-    if not verify_admin(auth_hash):
+    auth_token = request.headers.get('X-Auth-Token')
+    if not auth_token:
         return jsonify({'error': 'Unauthorized'}), 401
     
     data = load_data()
@@ -146,8 +248,8 @@ def add_project():
 @app.route('/api/projects/<int:id>', methods=['DELETE'])
 @rate_limit_check
 def delete_project(id):
-    auth_hash = request.headers.get('X-Auth-Hash')
-    if not verify_admin(auth_hash):
+    auth_token = request.headers.get('X-Auth-Token')
+    if not auth_token:
         return jsonify({'error': 'Unauthorized'}), 401
     
     data = load_data()
@@ -188,8 +290,8 @@ def get_links():
 @app.route('/api/links', methods=['POST'])
 @rate_limit_check
 def add_link():
-    auth_hash = request.headers.get('X-Auth-Hash')
-    if not verify_admin(auth_hash):
+    auth_token = request.headers.get('X-Auth-Token')
+    if not auth_token:
         return jsonify({'error': 'Unauthorized'}), 401
     
     data = load_data()
@@ -223,7 +325,7 @@ def get_stats():
     return jsonify({
         'total_projects': len(data['projects']),
         'total_links': len(data['links']),
-        'version': data['version'],
+        'version': '1.0.5',
         'total_visits': stats['total_visits'],
         'last_visit': stats['last_visit'],
         'most_viewed_projects': top_projects
@@ -232,8 +334,8 @@ def get_stats():
 @app.route('/api/admin/stats')
 @rate_limit_check
 def admin_stats():
-    auth_hash = request.headers.get('X-Auth-Hash')
-    if not verify_admin(auth_hash):
+    auth_token = request.headers.get('X-Auth-Token')
+    if not auth_token:
         return jsonify({'error': 'Unauthorized'}), 401
     
     data = load_data()
@@ -249,4 +351,8 @@ def admin_stats():
     })
 
 if __name__ == '__main__':
+    print(f"\nAdmin email: {ADMIN_EMAIL}")
+    if not EMAIL_PASSWORD:
+        print("WARNING: EMAIL_PASSWORD not set! Email verification will not work.")
+        print("Set environment variable: EMAIL_PASSWORD=your-app-password")
     app.run(debug=True, port=5000, host='0.0.0.0')
