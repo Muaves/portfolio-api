@@ -26,14 +26,14 @@ rate_limit_storage = defaultdict(list)
 RATE_LIMIT = 100
 RATE_WINDOW = 3600
 
-# Email verification codes (in production use Redis/database)
+# Email verification kodok 
 verification_codes = {}
 
-# Your email settings (use environment variables in production!)
-ADMIN_EMAIL = 'muaves@protonmail.com'  # ONLY THIS EMAIL!
-EMAIL_PASSWORD = os.environ.get('EMAIL_PASSWORD', '')  # App password for Gmail
+# email settjeim
+ADMIN_EMAIL = 'muaves@protonmail.com' 
+EMAIL_PASSWORD = os.environ.get('EMAIL_PASSWORD', '') 
 
-# Admin auth hash (generated after email verification)
+
 ADMIN_AUTH_HASH = "temp-hash-after-email-verification"
 
 if not STATS_FILE.exists():
@@ -76,7 +76,7 @@ def rate_limit_check(f):
 def send_verification_email(email, code):
     """Send verification code via email"""
     try:
-        # Create message
+    
         msg = MIMEMultipart()
         msg['From'] = ADMIN_EMAIL
         msg['To'] = email
@@ -97,7 +97,7 @@ If you didn't request this, please ignore this email.
 """
         msg.attach(MIMEText(body, 'plain'))
         
-        # Send via Gmail SMTP
+        # Send via Gmail smtp vagy mi
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
         server.login(ADMIN_EMAIL, EMAIL_PASSWORD)
@@ -126,7 +126,6 @@ def home():
         'security': 'Email verification + 2FA required for admin'
     })
 
-# EMAIL VERIFICATION ENDPOINTS
 @app.route('/api/admin/request-code', methods=['POST'])
 @rate_limit_check
 def request_verification_code():
@@ -134,20 +133,16 @@ def request_verification_code():
     data = request.json
     email = data.get('email', '').strip()
     
-    # Check if email is authorized
     if email != ADMIN_EMAIL:
         return jsonify({'error': 'Unauthorized email'}), 401
     
-    # Generate 6-digit code
     code = str(random.randint(100000, 999999))
     
-    # Store code with expiration (10 minutes)
     verification_codes[email] = {
         'code': code,
         'expires': datetime.now() + timedelta(minutes=10)
     }
     
-    # Send email
     if send_verification_email(email, code):
         return jsonify({
             'message': 'Verification code sent to your email',
@@ -164,25 +159,20 @@ def verify_code():
     email = data.get('email', '').strip()
     code = data.get('code', '').strip()
     
-    # Check if code exists
     if email not in verification_codes:
         return jsonify({'error': 'No verification code requested'}), 400
     
     stored = verification_codes[email]
     
-    # Check expiration
     if datetime.now() > stored['expires']:
         del verification_codes[email]
         return jsonify({'error': 'Code expired'}), 400
     
-    # Check code
     if code != stored['code']:
         return jsonify({'error': 'Invalid code'}), 401
     
-    # Generate session token
     session_token = hashlib.sha256(f"{email}{code}{datetime.now()}".encode()).hexdigest()
     
-    # Clean up used code
     del verification_codes[email]
     
     return jsonify({
@@ -190,7 +180,6 @@ def verify_code():
         'auth_token': session_token
     })
 
-# PUBLIC ENDPOINTS
 @app.route('/api/visit', methods=['POST'])
 @rate_limit_check
 def track_visit():
