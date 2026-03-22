@@ -367,7 +367,7 @@
             await loadLinks();
 
         } catch (error) {
-            document.getElementById('connStatus').textContent = "Offline";
+            console.error("Initialization error:", error);
         }
     }
 
@@ -392,6 +392,19 @@
         
         document.getElementById('homeStats').innerHTML = html;
         document.getElementById('statsGrid').innerHTML = html;
+
+        const topProjectsDiv = document.getElementById('topProjects');
+        if (stats.top_projects && stats.top_projects.length > 0) {
+            topProjectsDiv.innerHTML = stats.top_projects.map((p, i) => `
+                <div class="project-box">
+                    <div class="project-title">#${i + 1} ${p.name}</div>
+                    <div class="project-desc">${p.description}</div>
+                    <div class="project-tech">Views: ${p.views}</div>
+                </div>
+            `).join('');
+        } else {
+            topProjectsDiv.innerHTML = '<p>No data available yet.</p>';
+        }
     }
 
     async function loadAbout() {
@@ -412,8 +425,6 @@
         for (let i = 0; i < allProjects.length; i++) {
             const p = allProjects[i];
             const pId = i + 1;
-            const vRes = await fetch(`${API_URL}/projects/${pId}/views`).catch(() => null);
-            const vData = vRes ? await vRes.json() : { views: 0 };
 
             const box = document.createElement('div');
             box.className = 'project-box';
@@ -425,7 +436,7 @@
             box.innerHTML = `
                 <div class="project-title">${p.name}</div>
                 <div class="project-desc">${p.description}</div>
-                <div class="project-tech">Tech: ${p.tech} | Views: ${vData.views || 0}</div>
+                <div class="project-tech">Tech: ${p.tech}</div>
             `;
             container.appendChild(box);
         }
