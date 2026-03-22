@@ -153,7 +153,6 @@
             border: 1px solid #808080;
         }
         
-        /* Dashboard */
         .stat-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -186,7 +185,6 @@
     </style>
 </head>
 <body>
-    <!-- Login Screen -->
     <div id="loginStep" class="step active">
         <div class="window">
             <div class="title-bar">Admin Login Required</div>
@@ -220,7 +218,6 @@
         </div>
     </div>
 
-    <!-- Email Verification Step -->
     <div id="emailStep" class="step">
         <div class="window">
             <div class="title-bar">Email Verification Required</div>
@@ -251,7 +248,6 @@
         </div>
     </div>
 
-    <!-- Dashboard -->
     <div id="dashboard" class="step">
         <div class="window">
             <div class="title-bar">Admin Dashboard - Muaves Portfolio</div>
@@ -273,9 +269,8 @@
         
         const ADMIN_EMAIL = 'muaves@protonmail.com';
         
-        // Default credentials
-        const PASSWORD_HASH = '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9';  // admin123
-        const SECRET_HASH = 'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3';  // mysecret456
+        const PASSWORD_HASH = '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9';  
+        const SECRET_HASH = 'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3'; 
         
         let authToken = '';
         let expiresAt = null;
@@ -288,7 +283,6 @@
             return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
         }
         
-        // Login form
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -342,7 +336,6 @@
             }
         }
         
-        // Code verification
         document.getElementById('codeForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -460,7 +453,6 @@
             document.getElementById('loginBtn').textContent = 'LOGIN';
         }
         
-        // Check session on load
         window.addEventListener('DOMContentLoaded', () => {
             const savedToken = sessionStorage.getItem('authToken');
             if (savedToken) {
