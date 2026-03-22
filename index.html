@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MUAVES - Portfolio</title>
-
     <style>
         * {
             margin: 0;
@@ -260,63 +259,47 @@
 
 <body>
     <div class="window">
-        <div class="title-bar">
-            <span class="title-text">Muaves Portfolio - Internet Explorer</span>
+        <div class="title-bar"><span class="title-text">Muaves Portfolio - Internet Explorer</span>
             <div class="window-controls">
                 <div class="control-btn">_</div>
                 <div class="control-btn">□</div>
                 <div class="control-btn">X</div>
             </div>
         </div>
-
-        <div class="menu-bar">
-            <span class="menu-item" onclick="showSection('home')">Home</span>
-            <span class="menu-item" onclick="showSection('about')">About</span>
-            <span class="menu-item" onclick="showSection('projects')">Projects</span>
-            <span class="menu-item" onclick="showSection('links')">Links</span>
-            <span class="menu-item" onclick="showSection('stats')">Stats</span>
-        </div>
-
+        <div class="menu-bar"><span class="menu-item" onclick="showSection('home')">Home</span><span class="menu-item"
+                onclick="showSection('about')">About</span><span class="menu-item"
+                onclick="showSection('projects')">Projects</span><span class="menu-item"
+                onclick="showSection('links')">Links</span><span class="menu-item"
+                onclick="showSection('stats')">Stats</span></div>
         <div class="content">
             <div id="loading">Loading portfolio data...</div>
-
             <div id="sections" style="display: none;">
                 <div id="home" class="section active">
                     <h1>Welcome to my page!</h1>
-
                     <div class="info-box">
                         <h2 style="margin-top: 0;">Welcome, Visitor</h2>
-                        <p style="line-height: 1.6;">
-                            Hi, Im Muaves a developer, mainly in HTML, CSS, JS, but i use other languages too.
-                            And I like to use animate.css :)
-                        </p>
-                        <p style="margin-top: 10px; color: #808080; font-size: 12px;">
-                            This site is best viewed at 800x600 resolution with Netscape Navigator 4.0 or higher.
-                            Because its retro :).
-                        </p>
+                        <p style="line-height: 1.6;">Hi, Im Muaves a developer, mainly in HTML, CSS, JS, but i use other
+                            languages too.And I like to use animate.css :)</p>
+                        <p style="margin-top: 10px; color: #808080; font-size: 12px;">This site is best viewed at
+                            800x600 resolution with Netscape Navigator 4.0 or higher.Because its retro :).</p>
                     </div>
-
                     <h2>Quick Stats</h2>
                     <div id="homeStats" class="stats-grid"></div>
                 </div>
-
                 <div id="about" class="section">
                     <h1>About Me</h1>
                     <div class="info-box">
                         <pre id="aboutContent" style="background: #c0c0c0; border: none;">Loading...</pre>
                     </div>
                 </div>
-
                 <div id="projects" class="section">
                     <h1>My Projects</h1>
                     <div id="projectsGrid"></div>
                 </div>
-
                 <div id="links" class="section">
                     <h1>External Links</h1>
                     <div id="linksGrid"></div>
                 </div>
-
                 <div id="stats" class="section">
                     <h1>System Statistics</h1>
                     <div id="statsGrid" class="stats-grid"></div>
@@ -325,146 +308,13 @@
                 </div>
             </div>
         </div>
-
         <div class="status-bar">
-            <div class="footer-links">
-                <span title="In case if the API doesnt loads!">Useful links:</span>
-                <a href="https://muaves.com">My Website</a>
-                <a href="https://github.com/muaves/portfolio-api">Github</a>
-            </div>
-            <span style="margin-right: 10px;">Visitors: <span id="totalVisits">0</span></span>
+            <div class="footer-links"><span title="In case if the API doesnt loads!">Useful links:</span><a
+                    href="https://muaves.com">My Website</a><a href="https://github.com/muaves/portfolio-api">Github</a>
+            </div><span style="margin-right: 10px;">Visitors: <span id="totalVisits">0</span></span>
         </div>
-    </div>
-
-    <a href="admin.html" class="admin-button">Admin Panel</a>
-
-   <script>
-    const API_URL = 'https://muaves-portfolio-api.onrender.com/api';
-    let allProjects = [];
-
-    function showSection(sectionId) {
-        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-        const target = document.getElementById(sectionId);
-        if (target) {
-            target.classList.add('active');
-        }
-    }
-
-    async function init() {
-        document.getElementById('loading').style.display = 'none';
-        document.getElementById('sections').style.display = 'block';
-
-        try {
-            const visitRes = await fetch(`${API_URL}/visit`, { method: 'POST' }).catch(() => null);
-            if (visitRes && visitRes.ok) {
-                const data = await visitRes.json();
-                document.getElementById('totalVisits').textContent = data.total_visits;
-            }
-
-            await loadStats();
-            await loadAbout();
-            await loadProjects();
-            await loadLinks();
-
-        } catch (error) {
-            console.error(error);
-        }
-    }
-
-    async function loadStats() {
-        const res = await fetch(`${API_URL}/stats`).catch(() => null);
-        if (!res || !res.ok) return;
-        const stats = await res.json();
-        
-        const html = `
-            <div class="stat-box">
-                <div class="stat-number">${stats.total_projects || 0}</div>
-                <div class="stat-label">Projects</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number">${stats.total_visits || 0}</div>
-                <div class="stat-label">Visits</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number">1.0.8</div>
-                <div class="stat-label">Version</div>
-            </div>`;
-        
-        document.getElementById('homeStats').innerHTML = html;
-        document.getElementById('statsGrid').innerHTML = html;
-
-        const topProjectsDiv = document.getElementById('topProjects');
-        if (stats.top_projects && stats.top_projects.length > 0) {
-            topProjectsDiv.innerHTML = stats.top_projects.map((p, i) => `
-                <div class="project-box">
-                    <div class="project-title">#${i + 1} ${p.name}</div>
-                    <div class="project-desc">${p.description}</div>
-                    <div class="project-tech">Views: ${p.views}</div>
-                </div>
-            `).join('');
-        } else {
-            topProjectsDiv.innerHTML = '<p>No data available yet.</p>';
-        }
-    }
-
-    async function loadAbout() {
-        const res = await fetch(`${API_URL}/about`).catch(() => null);
-        if (!res || !res.ok) return;
-        const data = await res.json();
-        document.getElementById('aboutContent').textContent = data.about;
-    }
-
-    async function loadProjects() {
-        const res = await fetch(`${API_URL}/projects`).catch(() => null);
-        if (!res || !res.ok) return;
-        allProjects = await res.json();
-        
-        const statsRes = await fetch(`${API_URL}/stats`).catch(() => null);
-        const statsData = statsRes ? await statsRes.json() : { project_views: {} };
-        const viewCounts = statsData.project_views || {};
-
-        const container = document.getElementById('projectsGrid');
-        container.innerHTML = '';
-
-        for (let i = 0; i < allProjects.length; i++) {
-            const p = allProjects[i];
-            const pId = i + 1;
-            const currentViews = viewCounts[pId] || 0;
-
-            const box = document.createElement('div');
-            box.className = 'project-box';
-            box.style.position = 'relative';
-            
-            box.onclick = async () => {
-                await fetch(`${API_URL}/projects/${pId}/view`, { method: 'POST' }).catch(() => null);
-                alert(`PROJECT: ${p.name}\n\n${p.description}\n\nTech: ${p.tech}`);
-                loadProjects();
-                loadStats();
-            };
-
-            box.innerHTML = `
-                <div style="position: absolute; top: 5px; right: 10px; font-size: 10px; color: #808080;">
-                    Views: ${currentViews}
-                </div>
-                <div class="project-title">${p.name}</div>
-                <div class="project-desc">${p.description}</div>
-                <div class="project-tech">Tech: ${p.tech}</div>
-            `;
-            container.appendChild(box);
-        }
-    }
-
-    async function loadLinks() {
-        const res = await fetch(`${API_URL}/links`).catch(() => null);
-        if (!res || !res.ok) return;
-        const links = await res.json();
-        document.getElementById('linksGrid').innerHTML = links.map(l => 
-            `<a href="${l.url}" target="_blank" class="link-button">${l.name}</a>`
-        ).join('');
-    }
-
-    window.addEventListener('DOMContentLoaded', init);
-</script>
+    </div><a href="admin.html" class="admin-button">Admin Panel</a>
+    <script>const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:5000/api' : 'https://muaves-portfolio-api.onrender.com/api'; let allProjects = []; function showSection(sectionId) { document.querySelectorAll('.section').forEach(s => s.classList.remove('active')); document.getElementById(sectionId).classList.add('active'); } window.addEventListener('DOMContentLoaded', async () => { try { await trackVisit(); await loadStats(); await loadAbout(); await loadProjects(); await loadLinks(); document.getElementById('loading').style.display = 'none'; document.getElementById('sections').style.display = 'block'; } catch (error) { document.getElementById('loading').innerHTML = 'ERROR: Cannot connect to API server'; console.error('Error:', error); } }); async function trackVisit() { const response = await fetch(`${API_URL}/visit`, { method: 'POST' }); const data = await response.json(); document.getElementById('totalVisits').textContent = data.total_visits; } async function loadStats() { const response = await fetch(`${API_URL}/stats`); const stats = await response.json(); const html = `<div class="stat-box"><div class="stat-number">${stats.total_projects}</div><div class="stat-label">Projects</div></div><div class="stat-box"><div class="stat-number">${stats.total_links}</div><div class="stat-label">Links</div></div><div class="stat-box"><div class="stat-number">${stats.total_visits}</div><div class="stat-label">Visits</div></div><div class="stat-box"><div class="stat-number">v${stats.version}</div><div class="stat-label">Version</div></div>`; document.getElementById('homeStats').innerHTML = html; document.getElementById('statsGrid').innerHTML = html; const topProjects = document.getElementById('topProjects'); if (stats.most_viewed_projects && stats.most_viewed_projects.length > 0) { topProjects.innerHTML = stats.most_viewed_projects.map((p, i) => `<div class="project-box"><div class="project-title">#${i + 1} ${p.name}</div><div class="project-desc">${p.description}</div><div class="project-tech">Views: ${p.views}</div></div>`).join(''); } } async function loadAbout() { const response = await fetch(`${API_URL}/about`); const data = await response.json(); document.getElementById('aboutContent').textContent = data.about; } async function loadProjects() { const response = await fetch(`${API_URL}/projects`); allProjects = await response.json(); const container = document.getElementById('projectsGrid'); container.innerHTML = ''; for (let i = 0; i < allProjects.length; i++) { const project = allProjects[i]; const projectId = i + 1; const viewsResponse = await fetch(`${API_URL}/projects/${projectId}/views`); const viewsData = await viewsResponse.json(); const box = document.createElement('div'); box.className = 'project-box'; box.onclick = () => viewProject(project, projectId); box.innerHTML = `<div class="project-title">${project.name}</div><div class="project-desc">${project.description}</div><div class="project-tech">Tech: ${project.tech} | Status: ${project.status} | Views: ${viewsData.views}</div>`; container.appendChild(box); } } async function viewProject(project, projectId) { await fetch(`${API_URL}/projects/${projectId}/view`, { method: 'POST' }); alert('PROJECT: ' + project.name + '\n\n' + project.description + '\n\nTech: ' + project.tech + '\nStatus: ' + project.status); loadProjects(); } async function loadLinks() { const response = await fetch(`${API_URL}/links`); const links = await response.json(); const container = document.getElementById('linksGrid'); container.innerHTML = links.map(link => `<a href="${link.url}" target="_blank" class="link-button">${link.name}</a>`).join(''); }</script>
 </body>
 
 </html>
