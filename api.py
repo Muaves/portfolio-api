@@ -30,7 +30,6 @@ verification_codes = {}
 ADMIN_EMAIL = 'muaves@protonmail.com' 
 EMAIL_PASSWORD = os.environ.get('EMAIL_PASSWORD', '') 
 
-# Ez a hash felel meg a 'TungTungTungSahur' jelszónak
 ADMIN_AUTH_HASH = "0f156174a802717010777e324024340d04085429184518420140220677840134"
 
 if not STATS_FILE.exists():
@@ -145,7 +144,6 @@ def verify_code():
     if code != stored['code']:
         return jsonify({'error': 'Invalid code'}), 401
     
-    # Fontos: Az auth_token megegyezik az ADMIN_AUTH_HASH-el a statisztikák eléréséhez
     del verification_codes[email]
     return jsonify({
         'message': 'Verification successful',
