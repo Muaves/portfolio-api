@@ -339,114 +339,26 @@
     <a href="admin.html" class="admin-button">Admin Panel</a>
 
    <script>
-        const API_URL = 'https://muaves-portfolio-api.onrender.com/api';
-        let allProjects = [];
+    const API_URL = 'https://muaves-portfolio-api.onrender.com/api';
 
-        function showSection(sectionId) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.getElementById(sectionId).classList.add('active');
-        }
-
-        async function apiFetch(endpoint, options = {}) {
-            const response = await fetch(`${API_URL}${endpoint}`, options);
-            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-            return await response.json();
-        }
-
-        async function init() {
-            try {
-                const visitData = await apiFetch('/visit', { method: 'POST' });
-                document.getElementById('totalVisits').textContent = visitData.total_visits;
-
-                await loadStats();
-                await loadAbout();
-                await loadProjects();
-                await loadLinks();
-
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('sections').style.display = 'block';
-            } catch (error) {
-                console.error('Failed to load:', error);
-                document.getElementById('loading').innerHTML = 
-                    `<span style="color:red">ERROR: Cannot connect to API.</span><br>
-                     <small>The server might be waking up. Try refreshing in 30 seconds.</small>`;
-            }
-        }
-
-        async function loadStats() {
-            const stats = await apiFetch('/stats');
-            const topProjectsList = stats.top_projects || [];
+    async function init() {
+        try {
+            const res = await fetch(`${API_URL}/stats`);
+            if (!res.ok) throw new Error();
+            const stats = await res.json();
             
-            const html = `
-                <div class="stat-box">
-                    <div class="stat-number">${stats.total_projects || 0}</div>
-                    <div class="stat-label">Projects</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-number">${stats.total_visits || 0}</div>
-                    <div class="stat-label">Total Visits</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-number">1.0.8</div>
-                    <div class="stat-label">API Version</div>
-                </div>
-            `;
-            document.getElementById('homeStats').innerHTML = html;
-            document.getElementById('statsGrid').innerHTML = html;
-
-            const topProjectsDiv = document.getElementById('topProjects');
-            topProjectsDiv.innerHTML = topProjectsList.length > 0 
-                ? topProjectsList.map((p, i) => `
-                    <div class="project-box">
-                        <div class="project-title">#${i + 1} ${p.name}</div>
-                        <div class="project-desc">${p.description}</div>
-                        <div class="project-tech">Views: ${p.views}</div>
-                    </div>`).join('')
-                : '<p>No view data yet.</p>';
+            document.getElementById('totalVisits').textContent = stats.total_visits || 0;
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('sections').style.display = 'block';
+            
+            console.log("API is avaible, everything is OK!");
+        } catch (e) {
+            console.error(e);
+            document.getElementById('loading').innerHTML = "ERROR: API is down!";
         }
-
-        async function loadAbout() {
-            const data = await apiFetch('/about');
-            document.getElementById('aboutContent').textContent = data.about || "Bio not found.";
-        }
-
-        async function loadProjects() {
-            allProjects = await apiFetch('/projects');
-            const container = document.getElementById('projectsGrid');
-            container.innerHTML = '';
-
-            for (let i = 0; i < allProjects.length; i++) {
-                const project = allProjects[i];
-                const pId = i + 1;
-                
-                const vData = await apiFetch(`/projects/${pId}/views`);
-
-                const box = document.createElement('div');
-                box.className = 'project-box';
-                box.onclick = async () => {
-                    await apiFetch(`/projects/${pId}/view`, { method: 'POST' });
-                    alert(`${project.name}\n\n${project.description}\n\nTech: ${project.tech}`);
-                    loadProjects(); 
-                };
-                box.innerHTML = `
-                    <div class="project-title">${project.name}</div>
-                    <div class="project-desc">${project.description}</div>
-                    <div class="project-tech">Tech: ${project.tech} | Views: ${vData.views || 0}</div>
-                `;
-                container.appendChild(box);
-            }
-        }
-
-        async function loadLinks() {
-            const links = await apiFetch('/links');
-            const container = document.getElementById('linksGrid');
-            container.innerHTML = links.length > 0 
-                ? links.map(l => `<a href="${l.url}" target="_blank" class="link-button">${l.name}</a>`).join('')
-                : '<p>No links available.</p>';
-        }
-
-        window.addEventListener('DOMContentLoaded', init);
-    </script>
+    }
+    window.addEventListener('DOMContentLoaded', init);
+</script>
 </body>
 
 </html>
