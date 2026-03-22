@@ -30,7 +30,7 @@
 
 This is the backend API for my personal portfolio website, built with Flask and deployed on Render. It provides RESTful endpoints for managing projects, links, analytics, and more. The API supports real-time view tracking, search functionality, filtering, and full CRUD operations for portfolio content.
 
-**Live API:** [muaves-portfolio-api.onrender.com](https://muaves-portfolio-api.onrender.com)  
+**Live API:** [core.muaves.com](https://core.muaves.com)  
 **Frontend:** [muaves.github.io/portfolio-api](https://muaves.github.io/portfolio-api)  
 **Status Page:** [stats.uptimerobot.com/pjTx4GKB5E](https://stats.uptimerobot.com/pjTx4GKB5E)
 
