@@ -110,7 +110,7 @@ GET /api/stats
 ### Base URL
 
 ```
-https://muaves-portfolio-api.onrender.com
+https://core.muaves.com
 ```
 
 ### Endpoints
