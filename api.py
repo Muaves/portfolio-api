@@ -2,8 +2,9 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import json
-import hashlib
 import os
+import time
+import httpx
 from datetime import datetime, timedelta
 from pathlib import Path
 from collections import defaultdict
@@ -16,17 +17,28 @@ app.url_map.strict_slashes = False
 BASE_DIR = Path(__file__).parent
 DATA_FILE = BASE_DIR / 'portfolio_data.json'
 STATS_FILE = BASE_DIR / 'stats.json'
+RADIO_FILE = BASE_DIR / 'radio_data.json'
 
 rate_limit_storage = defaultdict(list)
 RATE_LIMIT = 100
 RATE_WINDOW = 3600
 
-
 ADMIN_AUTH_HASH = "cfe8a35f2a07b0f3ef244831a36e8e8a0e4c8b4d8e0f4e0e0e0e0e0e0e0e0e0e"
+
+GITHUB_RAW_BASE = os.environ.get(
+    "RADIO_GITHUB_RAW",
+    "https://raw.githubusercontent.com/Muaves/portfolio-api/main/radio/tracks"
+)
+
+STATION_START = time.time()
 
 if not STATS_FILE.exists():
     with open(STATS_FILE, 'w') as f:
         json.dump({'total_visits': 0, 'project_views': {}, 'last_visit': None}, f)
+
+if not RADIO_FILE.exists():
+    with open(RADIO_FILE, 'w') as f:
+        json.dump([], f)
 
 
 def load_data():
@@ -44,6 +56,14 @@ def load_stats():
 def save_stats(stats):
     with open(STATS_FILE, 'w', encoding='utf-8') as f:
         json.dump(stats, f, indent=2)
+
+def load_radio():
+    with open(RADIO_FILE, 'r', encoding='utf-8') as f:
+        return json.load(f)
+
+def save_radio(tracks):
+    with open(RADIO_FILE, 'w', encoding='utf-8') as f:
+        json.dump(tracks, f, indent=2)
 
 def get_client_ip():
     if request.headers.getlist("X-Forwarded-For"):
@@ -66,20 +86,30 @@ def verify_admin(auth_hash):
     return auth_hash == ADMIN_AUTH_HASH
 
 
+# ---------------------------------------------------------------------------
+# Existing portfolio endpoints
+# ---------------------------------------------------------------------------
+
 @app.route('/')
 def home():
     return jsonify({
-        'message': 'Muaves Portfolio API v1.0.4',
+        'message': 'Muaves Portfolio API v1.1.0',
         'endpoints': {
             'projects': '/api/projects',
             'links': '/api/links',
             'about': '/api/about',
             'stats': '/api/stats',
-            'search': '/api/search?q=term'
+            'search': '/api/search?q=term',
+            'radio': {
+                'tracks': '/api/radio/tracks',
+                'now_playing': '/api/radio/now-playing',
+                'add_track': 'POST /api/radio/tracks (admin)',
+                'delete_track': 'DELETE /api/radio/tracks/<id> (admin)',
+            }
         },
         'security': {
             'rate_limit': f'{RATE_LIMIT} requests per hour per IP',
-            'admin': 'Two-factor authentication required'
+            'admin': 'X-Auth-Hash header required'
         }
     })
 
@@ -143,9 +173,9 @@ def search():
         return jsonify([])
     data = load_data()
     return jsonify([
-        p for p in data['projects'] 
-        if query in p['name'].lower() 
-        or query in p['description'].lower() 
+        p for p in data['projects']
+        if query in p['name'].lower()
+        or query in p['description'].lower()
         or query in p['tech'].lower()
     ])
 
@@ -180,7 +210,6 @@ def get_stats():
         'last_visit': stats['last_visit'],
         'most_viewed_projects': top_projects
     })
-
 
 @app.route('/api/projects', methods=['POST'])
 @rate_limit_check
@@ -235,17 +264,104 @@ def admin_stats():
     in_progress = len([p for p in data['projects'] if 'progress' in p['status'].lower()])
     return jsonify({
         'projects': {
-            'total': len(data['projects']), 
-            'completed': completed, 
+            'total': len(data['projects']),
+            'completed': completed,
             'in_progress': in_progress
         },
         'links': {'total': len(data['links'])},
         'views': {
-            'total_visits': stats['total_visits'], 
+            'total_visits': stats['total_visits'],
             'last_visit': stats['last_visit'],
             'project_views': stats['project_views']
         }
     })
+
+
+# ---------------------------------------------------------------------------
+# Radio endpoints
+# ---------------------------------------------------------------------------
+
+@app.route('/api/radio/tracks', methods=['GET'])
+@rate_limit_check
+def radio_tracks():
+    tracks = load_radio()
+    for i, t in enumerate(tracks):
+        t['id'] = i
+        t['url'] = f"{GITHUB_RAW_BASE}/{t['filename']}"
+    return jsonify(tracks)
+
+
+@app.route('/api/radio/now-playing', methods=['GET'])
+@rate_limit_check
+def radio_now_playing():
+    tracks = load_radio()
+    if not tracks:
+        return jsonify({'error': 'No tracks in playlist'}), 404
+
+    total_duration = sum(t.get('duration', 180) for t in tracks)
+    if total_duration == 0:
+        return jsonify({'error': 'Tracks have no duration set'}), 500
+
+    elapsed = (time.time() - STATION_START) % total_duration
+
+    cumulative = 0
+    for i, track in enumerate(tracks):
+        duration = track.get('duration', 180)
+        if cumulative + duration > elapsed:
+            result = dict(track)
+            result['id'] = i
+            result['url'] = f"{GITHUB_RAW_BASE}/{track['filename']}"
+            result['seek'] = round(elapsed - cumulative, 2)
+            result['index'] = i
+            return jsonify(result)
+        cumulative += duration
+
+    first = dict(tracks[0])
+    first['id'] = 0
+    first['url'] = f"{GITHUB_RAW_BASE}/{tracks[0]['filename']}"
+    first['seek'] = 0
+    first['index'] = 0
+    return jsonify(first)
+
+
+@app.route('/api/radio/tracks', methods=['POST'])
+@rate_limit_check
+def radio_add_track():
+    auth_hash = request.headers.get('X-Auth-Hash')
+    if not verify_admin(auth_hash):
+        return jsonify({'error': 'Unauthorized'}), 401
+
+    body = request.json
+    if not all(k in body for k in ['title', 'artist', 'filename', 'duration']):
+        return jsonify({'error': 'Missing fields: title, artist, filename, duration'}), 400
+
+    tracks = load_radio()
+    new_track = {
+        'title': body['title'],
+        'artist': body['artist'],
+        'filename': body['filename'],
+        'duration': float(body['duration']),
+    }
+    tracks.append(new_track)
+    save_radio(tracks)
+    return jsonify({'message': 'Track added!', 'track': new_track}), 201
+
+
+@app.route('/api/radio/tracks/<int:id>', methods=['DELETE'])
+@rate_limit_check
+def radio_delete_track(id):
+    auth_hash = request.headers.get('X-Auth-Hash')
+    if not verify_admin(auth_hash):
+        return jsonify({'error': 'Unauthorized'}), 401
+
+    tracks = load_radio()
+    if not (0 <= id < len(tracks)):
+        return jsonify({'error': 'Track not found'}), 404
+
+    deleted = tracks.pop(id)
+    save_radio(tracks)
+    return jsonify({'message': 'Deleted!', 'track': deleted})
+
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
