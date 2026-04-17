@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Redstone Radio - Demo</title>
+</head>
+<body>
+
+<h1>Redstone Radio</h1>
+<p id="status">Loading...</p>
+
+<div id="player" style="display:none">
+  <p><strong id="track-title">-</strong> &mdash; <span id="track-artist">-</span></p>
+  <audio id="audio" controls></audio>
+  <br><br>
+  <label for="volume">Volume:</label>
+  <input type="range" id="volume" min="0" max="1" step="0.01" value="1" />
+  <br><br>
+  <button id="btn-skip">Skip</button>
+</div>
+
+<hr>
+<h2>Playlist</h2>
+<ul id="playlist"></ul>
+
+<script>
+  const API = 'https://core.muaves.com';
+  const audio = document.getElementById('audio');
+  const status = document.getElementById('status');
+  const player = document.getElementById('player');
+  const titleEl = document.getElementById('track-title');
+  const artistEl = document.getElementById('track-artist');
+  const volumeEl = document.getElementById('volume');
+  const playlistEl = document.getElementById('playlist');
+  const skipBtn = document.getElementById('btn-skip');
+
+  let tracks = [];
+  let currentIndex = 0;
+
+  async function fetchTracks() {
+    const res = await fetch(`${API}/api/radio/tracks`);
+    tracks = await res.json();
+    renderPlaylist();
+  }
+
+  function renderPlaylist() {
+    playlistEl.innerHTML = '';
+    tracks.forEach((t, i) => {
+      const li = document.createElement('li');
+      li.textContent = `${t.title} — ${t.artist}`;
+      li.style.cursor = 'pointer';
+      li.onclick = () => playTrack(i, 0);
+      playlistEl.appendChild(li);
+    });
+  }
+
+  function playTrack(index, seek) {
+    if (!tracks[index]) return;
+    currentIndex = index;
+    const t = tracks[index];
+    titleEl.textContent = t.title;
+    artistEl.textContent = t.artist;
+    audio.src = t.url;
+    audio.currentTime = seek;
+    audio.play();
+    player.style.display = 'block';
+    status.textContent = 'Playing';
+  }
+
+  async function syncNowPlaying() {
+    try {
+      const res = await fetch(`${API}/api/radio/now-playing`);
+      if (!res.ok) { status.textContent = 'No tracks available yet.'; return; }
+      const data = await res.json();
+      currentIndex = data.index;
+      titleEl.textContent = data.title;
+      artistEl.textContent = data.artist;
+      audio.src = data.url;
+      audio.currentTime = data.seek;
+      audio.play();
+      player.style.display = 'block';
+      status.textContent = 'Synced to station';
+    } catch {
+      status.textContent = 'Could not connect to radio.';
+    }
+  }
+
+  audio.addEventListener('ended', () => {
+    const next = (currentIndex + 1) % tracks.length;
+    playTrack(next, 0);
+  });
+
+  skipBtn.addEventListener('click', () => {
+    const next = (currentIndex + 1) % tracks.length;
+    playTrack(next, 0);
+  });
+
+  volumeEl.addEventListener('input', () => {
+    audio.volume = volumeEl.value;
+  });
+
+  fetchTracks().then(syncNowPlaying);
+</script>
+
+</body>
+</html>
