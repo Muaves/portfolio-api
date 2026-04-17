@@ -4,7 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MUAVES - Portfolio</title> 
+    <title>MUAVES - Portfolio</title>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3K03LYDK01"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+    </script>
+    <link rel="stylesheet" href="/cookies/cookie.css">
     <style>
         * {
             margin: 0;
@@ -314,7 +321,9 @@
             </div><span style="margin-right: 10px;">Visitors: <span id="totalVisits">0</span></span>
         </div>
     </div><a href="admin.html" class="admin-button">Admin Panel</a>
-   <script src="./src/index.js"></script>
+    <script src="./src/index.js"></script>
+    <div id="cookie-placeholder"></div>
+    <script src="/cookies/cookie.js"></script>
 </body>
 
 </html>

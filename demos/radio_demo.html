@@ -1,29 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <title>Redstone Radio - Demo</title>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3K03LYDK01"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+  </script>
+  <link rel="stylesheet" href="/cookies/cookie.css">
 </head>
+
 <body>
+  <div id="cookie-placeholder"></div>
+  <script src="/cookies/cookie.js"></script>
+  <h1>Redstone Radio</h1>
+  <p id="status">Loading...</p>
 
-<h1>Redstone Radio</h1>
-<p id="status">Loading...</p>
+  <div id="player" style="display:none">
+    <p><strong id="track-title">-</strong> &mdash; <span id="track-artist">-</span></p>
+    <audio id="audio" controls></audio>
+    <br><br>
+    <label for="volume">Volume:</label>
+    <input type="range" id="volume" min="0" max="1" step="0.01" value="1" />
+    <br><br>
+    <button id="btn-skip">Skip</button>
+  </div>
 
-<div id="player" style="display:none">
-  <p><strong id="track-title">-</strong> &mdash; <span id="track-artist">-</span></p>
-  <audio id="audio" controls></audio>
-  <br><br>
-  <label for="volume">Volume:</label>
-  <input type="range" id="volume" min="0" max="1" step="0.01" value="1" />
-  <br><br>
-  <button id="btn-skip">Skip</button>
-</div>
+  <hr>
+  <h2>Playlist</h2>
+  <ul id="playlist"></ul>
 
-<hr>
-<h2>Playlist</h2>
-<ul id="playlist"></ul>
-
-<script src="radio_demo.js"></script>
+  <script src="radio_demo.js"></script>
 
 </body>
+
 </html>
