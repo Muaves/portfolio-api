@@ -1,14 +1,56 @@
 [
   {
+    "title": "Highway to Hell",
+    "artist": "AC/DC",
+    "filename": "AC_DC - Highway to Hell.mp3",
+    "duration": 209
+  },
+  {
+    "title": "We Don't Care",
+    "artist": "Akon",
+    "filename": "Akon - We Dont Care.mp3",
+    "duration": 234
+  },
+  {
     "title": "Aviva",
     "artist": "C418",
     "filename": "C418 - Aviva.mp3",
-    "duration": 215.0
+    "duration": 198
   },
   {
-    "title": "Your Track Name",
-    "artist": "Artist Name",
-    "filename": "yourfile.mp3",
-    "duration": 180.0
+    "title": "Moog City",
+    "artist": "C418",
+    "filename": "C418 - Moog City .mp3",
+    "duration": 174
+  },
+  {
+    "title": "Volume Alpha",
+    "artist": "C418",
+    "filename": "C418 - Volume Aplha.mp3",
+    "duration": 214
+  },
+  {
+    "title": "Diss Track",
+    "artist": "DangerMario",
+    "filename": "DangerMario Diss Track.mp3",
+    "duration": 180
+  },
+  {
+    "title": "Never Going Home",
+    "artist": "Kungs",
+    "filename": "Kungs - Never Going Home.mp3",
+    "duration": 195
+  },
+  {
+    "title": "Under The Bridge",
+    "artist": "Red Hot Chili Peppers",
+    "filename": "Red Hot Chili Peppers - Under The Bridge.mp3",
+    "duration": 257
+  },
+  {
+    "title": "Never Gonna Give You Up",
+    "artist": "Rick Astley",
+    "filename": "Rick Astley - Never Gonna Give You Up.mp3",
+    "duration": 213
   }
 ]
