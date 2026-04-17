@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "title": "Aviva",
+    "artist": "C418",
+    "filename": "C418 - Aviva.mp3",
+    "duration": 215.0
+  },
+  {
+    "title": "Your Track Name",
+    "artist": "Artist Name",
+    "filename": "yourfile.mp3",
+    "duration": 180.0
+  }
+]
