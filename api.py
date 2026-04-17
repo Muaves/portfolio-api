@@ -4,7 +4,6 @@ from flask_cors import CORS
 import json
 import os
 import time
-import httpx
 from datetime import datetime, timedelta
 from pathlib import Path
 from collections import defaultdict
@@ -86,9 +85,6 @@ def verify_admin(auth_hash):
     return auth_hash == ADMIN_AUTH_HASH
 
 
-# ---------------------------------------------------------------------------
-# Existing portfolio endpoints
-# ---------------------------------------------------------------------------
 
 @app.route('/')
 def home():
@@ -277,9 +273,6 @@ def admin_stats():
     })
 
 
-# ---------------------------------------------------------------------------
-# Radio endpoints
-# ---------------------------------------------------------------------------
 
 @app.route('/api/radio/tracks', methods=['GET'])
 @rate_limit_check
