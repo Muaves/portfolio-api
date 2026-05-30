@@ -25,7 +25,7 @@
       "name": "Redstone CLI",
       "description": "Redstone Launcher but faster and simpler",
       "tech": "Rust, Bash",
-      "status": "Coming soon..."
+      "status": "Completed"
     },
     {
       "name": "Zenox Gaming",
@@ -38,6 +38,18 @@
       "description": "Templix. is an open-source free html, css copy-paste component library",
       "tech": "HTML, CSS, JavaScript, JSON",
       "status": "Completed, but maintained"
+    },
+    {
+      "name": "MuavesCLI",
+      "description": "Your portfolio but it's in bash!",
+      "tech": "HTML, CSS, JavaScript, Python",
+      "status": "Completed"
+    },
+    {
+      "name": "Tierlist",
+      "description": "An open source minecraft tierlist base ",
+      "tech": "Typescript",
+      "status": "Coming soon..."
     }
   ],
   "links": [
@@ -58,12 +70,24 @@
       "url": "https://redstone-launcher.com"
     },
     {
+      "name": "RedstoneCLI",
+      "url": "https://github.com/Muaves/redstone-cli/releases/tag/v0.1.0"
+    },
+    {
       "name": "Zenox Gaming",
       "url": "https://zenoxgaming.github.io"
     },
     {
       "name": "Templix.",
       "url": "https://templix.muaves.com"
+    },
+    {
+      "name": "MuavesCLI",
+      "url": "https://muaves.com/muavescli"
+    },
+    {
+      "name": "Tierlist",
+      "url": "https://muaves.com/tierlist"
     }
   ],
   "website": "https://muaves.github.io"
